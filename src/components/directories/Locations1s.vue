@@ -79,7 +79,7 @@
           />
 
           <dx-grouping :auto-expand-all="false" />
-          <dx-group-panel :visible="true" />
+          <dx-group-panel :visible="false" />
           <dx-header-filter :visible="true" />
           <dx-filter-row :visible="true" />
           <dx-search-panel
