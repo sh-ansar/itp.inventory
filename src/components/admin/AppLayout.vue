@@ -99,6 +99,11 @@ export default {
 
 @media (max-width: 640px) {
   .va-page-layout {
+    > .va-sidebar {
+      top: 108px !important;
+      min-height: calc(100vh - 108px) !important;
+    }
+
     > .va-sidebar.va-sidebar--minimized {
       width: 0 !important;
       min-width: 0 !important;
@@ -118,6 +123,7 @@ export default {
     .content-wrap {
       width: 100% !important;
       max-width: 100% !important;
+      min-height: calc(100vh - 108px);
       margin-left: 0 !important;
       overflow-x: hidden;
     }
