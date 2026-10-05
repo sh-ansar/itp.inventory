@@ -425,23 +425,20 @@ export default {
     }
 
     &__actions {
-      min-width: max-content;
-      gap: .2rem;
+      min-width: 52px;
+      gap: 0;
       flex-wrap: nowrap;
+      justify-self: end;
+      overflow: visible;
     }
 
     &__profile {
-      display: block;
-      flex: 0 0 36px;
+      display: none;
     }
 
-    .profile-dropdown__anchor {
-      width: 36px;
-      min-width: 36px;
-      min-height: 36px;
-      justify-content: center;
-      padding: .15rem !important;
-      overflow: hidden;
+    &__language {
+      display: block;
+      flex: 0 0 auto;
     }
 
     &__avatar {
