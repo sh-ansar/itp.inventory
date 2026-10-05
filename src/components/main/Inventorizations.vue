@@ -103,7 +103,7 @@
     <div class="flex xl12 xs12">
       <div class="row">
         <div class="flex xl12 xs12">
-          <va-card :title="$t('app.pages.inventories.inventories')" class="inventory-list-card">
+          <va-card :title="$t('app.pages.inventories.inventories')" class="inventory-list-card data-table-card">
 <!--            <va-button-->
 <!--             small-->
 <!--             slot="actions"-->
