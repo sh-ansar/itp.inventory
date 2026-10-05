@@ -148,4 +148,36 @@ export default {
     }
   }
 }
+
+@media (max-width: 640px) {
+  .dashboard {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .dashboard-hero {
+    gap: .9rem;
+    margin-bottom: .85rem;
+    padding: 1rem;
+
+    &__title {
+      font-size: 1.45rem;
+      line-height: 1.18;
+    }
+
+    &__subtitle {
+      font-size: .84rem;
+      line-height: 1.45;
+    }
+
+    &__status {
+      padding: .72rem .8rem;
+
+      strong {
+        font-size: .81rem;
+        line-height: 1.3;
+      }
+    }
+  }
+}
 </style>
