@@ -1,7 +1,7 @@
 <template>
   <div class="row row-equal">
     <div class="flex xl12 xs12">
-      <va-card :title="$t('app.pages.directories.personsTitle')">
+      <va-card :title="$t('app.pages.directories.personsTitle')" class="data-table-card">
         <va-button
           small
           slot="actions"
