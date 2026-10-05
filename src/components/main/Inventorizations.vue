@@ -1,5 +1,5 @@
 <template>
-  <div class="row row-equal">
+  <div class="row row-equal inventory-page">
     <div class="flex xl12 xs12">
       <div class="row">
         <div
@@ -7,7 +7,8 @@
         >
           <va-card
            :title="$t('app.pages.inventories.initiation')"
-            v-if="canManager"
+           class="inventory-create-card"
+           v-if="canManager"
           >
             <input type="file" style="display: none" id="fileUploader">
             <va-button
@@ -40,8 +41,8 @@
 <!--                <va-button icon="va-icon ion ion-ios-list" @click="showItemsModal = true"> {{ $t('main.inventorizations.items_list') }}</va-button>-->
 <!--              </div>-->
 <!--            </div>-->
-            <div class="row">
-              <div class="flex xs4">
+            <div class="row inventory-create-grid">
+              <div class="flex xs12 md4">
                 <va-multiple-select
                  :label="$t('app.pages.inventories.company')"
                  v-model="company"
@@ -58,7 +59,7 @@
 <!--                  :options="companies"-->
 <!--                />-->
               </div>
-              <div class="flex xs4 align--center">
+              <div class="flex xs12 md4 align--center">
                 <va-select
                  :label="$t('main.inventorizations.inventory_by')"
                  v-model="invTypeModel"
@@ -67,7 +68,7 @@
                  :options="invTypeOptions"
                 />
               </div>
-              <div class="flex xs4 align--center">
+              <div class="flex xs12 md4 align--center">
                 <va-multiple-select
                  :label="$t('main.inventorizations.belongs')"
                  v-model="currentFilterItem"
@@ -84,11 +85,15 @@
 <!--                 textBy="name"-->
 <!--                 :options="filterItems"/>-->
               </div>
-              <div class="flex xs12" style="text-align: center">
-                <div style="display: flex;justify-content: center">
-                  <va-button @click="updateItems">{{ $t('app.pages.inventories.refreshList') }}</va-button>
-                  <va-button icon="va-icon ion ion-ios-list" @click="showItemsModal = true" :disabled="items.length === 0"> {{ $t('main.inventorizations.items_list') }}</va-button>
-                </div>
+              <div class="flex xs12 inventory-create-actions">
+                <va-button @click="updateItems">{{ $t('app.pages.inventories.refreshList') }}</va-button>
+                <va-button
+                  icon="va-icon ion ion-ios-list"
+                  @click="showItemsModal = true"
+                  :disabled="items.length === 0"
+                >
+                  {{ $t('main.inventorizations.items_list') }}
+                </va-button>
               </div>
             </div>
           </va-card>
@@ -98,7 +103,7 @@
     <div class="flex xl12 xs12">
       <div class="row">
         <div class="flex xl12 xs12">
-          <va-card :title="$t('app.pages.inventories.inventories')">
+          <va-card :title="$t('app.pages.inventories.inventories')" class="inventory-list-card">
 <!--            <va-button-->
 <!--             small-->
 <!--             slot="actions"-->
@@ -109,6 +114,7 @@
 <!--            </va-button>-->
             <ClearPreferencesButton table_id="invs"></ClearPreferencesButton>
             <dx-data-grid
+             class="inventory-grid"
              :data-source="inventorizations"
              :remote-operations="false"
              :allow-column-reordering="true"
@@ -213,10 +219,11 @@
                :allowed-page-sizes="pageSizes"
                :show-info="true"
               />
-              <dx-group-panel :visible="true"/>
+              <dx-group-panel :visible="false"/>
               <dx-search-panel
                :visible="true"
-               :highlight-case-sensitive="true"
+               :highlight-case-sensitive="false"
+               width="220"
               />
               <dx-grouping :auto-expand-all="false"/>
             </dx-data-grid>
@@ -871,5 +878,67 @@ export default {
 </script>
 
 <style scoped>
-
+.inventory-page {
+  padding-bottom: 2rem;
+}
+.inventory-create-card,
+.inventory-list-card {
+  border: 1px solid #e5ebf2;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(17, 29, 45, .055);
+  overflow: hidden;
+}
+.inventory-create-grid {
+  align-items: flex-end;
+  row-gap: .25rem;
+}
+.inventory-create-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: .65rem;
+  padding-top: .45rem;
+}
+.inventory-create-actions .va-button {
+  min-width: 150px;
+  border-radius: 10px;
+  box-shadow: none;
+}
+.inventory-grid {
+  margin-top: .6rem;
+  border: 1px solid #e6ebf1;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.inventory-page >>> .dx-datagrid {
+  color: #31465c;
+  font-size: 13px;
+}
+.inventory-page >>> .dx-datagrid-headers {
+  color: #5f6f82;
+  background: #f7f9fc;
+  font-weight: 600;
+}
+.inventory-page >>> .dx-datagrid-rowsview .dx-row > td,
+.inventory-page >>> .dx-datagrid-headers .dx-row > td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-color: #edf1f5;
+}
+.inventory-page >>> .dx-datagrid-search-panel {
+  height: 38px;
+  border-radius: 9px;
+}
+.inventory-page >>> .dx-pager {
+  padding-top: 10px;
+  padding-bottom: 6px;
+}
+@media (max-width: 767px) {
+  .inventory-create-actions {
+    justify-content: stretch;
+    flex-direction: column;
+  }
+  .inventory-create-actions .va-button {
+    width: 100%;
+  }
+}
 </style>

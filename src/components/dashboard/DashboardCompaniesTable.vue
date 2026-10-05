@@ -102,7 +102,6 @@
       />
 
       <dx-header-filter :visible="true"></dx-header-filter>
-      <dx-filter-row :visible="true" />
       <dx-search-panel
         :visible="true"
         :highlight-case-sensitive="false"
@@ -150,7 +149,6 @@ import {
   DxStateStoring,
   DxHeaderFilter,
   DxSearchPanel,
-  DxFilterRow,
 } from 'devextreme-vue/data-grid'
 import {
   GET_COMPANIES_WITH_SYNC_INFO,
@@ -172,7 +170,6 @@ export default {
     DxHeaderFilter,
     DxPaging,
     DxSearchPanel,
-    DxFilterRow,
   },
   data () {
     return {

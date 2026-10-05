@@ -165,13 +165,13 @@ export default {
     position: relative;
     width: 100%;
     min-width: 0;
-    padding-top: 14px;
+    padding-top: 18px;
   }
 
   &__company-label {
     position: absolute;
     z-index: 4;
-    top: 0;
+    top: 4px;
     left: 3px;
     color: #8a9aab;
     font-size: .61rem;
