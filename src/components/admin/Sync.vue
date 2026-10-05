@@ -51,7 +51,7 @@
              :row-alternation-enabled="true"
              :show-borders="true"
             >
-              <dx-group-panel :visible="true"/>
+              <dx-group-panel :visible="false"/>
               <dx-grouping :auto-expand-all="false"/>
               <DxPager
                :show-page-size-selector="true"
@@ -162,7 +162,7 @@
            :show-borders="true"
            @row-prepared="rowPrepared"
           >
-            <dx-group-panel :visible="true"/>
+            <dx-group-panel :visible="false"/>
             <dx-grouping :auto-expand-all="false"/>
             <DxPager
              :show-page-size-selector="true"
