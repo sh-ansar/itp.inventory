@@ -359,14 +359,14 @@ const assetTemplates = [
   { name: 'Термопринтер TSC TE310', cost: 244000, account: '2410' },
 ]
 
-const extraItems = Array.from({ length: 120 }, (_, index) => {
+const extraItems = Array.from({ length: 1411 }, (_, index) => {
   const id = index + 8
   const companyId = (index % 4) + 1
   const profile = companyProfiles[companyId]
   const location = profile.locations[index % profile.locations.length]
   const person = profile.people[index % profile.people.length]
   const template = assetTemplates[index % assetTemplates.length]
-  const statusId = index % 17 === 0 ? '3' : (index % 9 === 0 ? '2' : '1')
+  const statusId = index < 1279 ? '1' : (index < 1371 ? '2' : '3')
   const status = statusId === '3' ? 'Утилизирован' : (statusId === '2' ? 'За балансом' : 'На балансе')
   const year = 2022 + (index % 5)
   const month = String((index % 12) + 1).padStart(2, '0')
@@ -593,6 +593,21 @@ const lineChart = {
 
 const counts = { on_balance: 1284, written_off: 93, removed: 41 }
 
+function itemCounts (config) {
+  const params = (config && config.params) || {}
+  let source = items
+
+  if (params.company_id !== undefined && params.company_id !== null && params.company_id !== '') {
+    source = source.filter(item => Number(item.company_id) === Number(params.company_id))
+  }
+
+  return {
+    on_balance: source.filter(item => String(item.status_id) === '1').length,
+    written_off: source.filter(item => String(item.status_id) === '2').length,
+    removed: source.filter(item => String(item.status_id) === '3').length,
+  }
+}
+
 const inventoryProgress = [
   { value: 78, maxvalue: 100, color: 'success', textKey: 'app.dashboard.inventoryCentralWarehouse' },
   { value: 46, maxvalue: 62, color: 'info', textKey: 'app.dashboard.inventoryProductionSite' },
@@ -682,6 +697,10 @@ export function getMockApiData (config) {
 
   if (url === GET_ITEMS) {
     return clone(filteredItems(config))
+  }
+
+  if (url === GET_ITEMS_COUNT) {
+    return clone(itemCounts(config))
   }
 
   if (Object.prototype.hasOwnProperty.call(responseMap, url)) {
