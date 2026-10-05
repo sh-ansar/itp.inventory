@@ -619,6 +619,31 @@ body {
     border-radius: 15px;
   }
 
+  .layout .data-table-card .va-card__header {
+    min-height: 0;
+    padding: .75rem .9rem .45rem;
+  }
+
+  .layout .data-table-card .va-card__header-inner {
+    min-height: 0;
+    padding: 0 !important;
+    gap: .4rem;
+    align-items: flex-start;
+  }
+
+  .layout .data-table-card .va-card__header-title {
+    line-height: 1.25;
+  }
+
+  .layout .data-table-card .va-card__header-actions {
+    min-height: 0;
+    padding: 0;
+  }
+
+  .layout .data-table-card .va-card__header-actions .va-button {
+    margin: 0 !important;
+  }
+
   .layout .data-table-card .va-card__body {
     padding: .65rem .7rem .8rem !important;
   }
