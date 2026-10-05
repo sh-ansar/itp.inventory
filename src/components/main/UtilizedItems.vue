@@ -220,7 +220,7 @@
             />
           </dx-column>
           <dx-filter-row
-           :visible="true"
+           :visible="false"
            apply-filter="onClick"
           />
           <dx-column-chooser
