@@ -9,6 +9,13 @@
     <app-sidebar
       :minimized="minimized"
     />
+    <button
+      v-if="!minimized"
+      type="button"
+      class="mobile-sidebar-backdrop"
+      aria-label="Закрыть меню"
+      @click="closeSidebar"
+    ></button>
     <main
       slot="content"
       id="content"
@@ -45,9 +52,19 @@ export default {
       'isLoading',
     ]),
   },
+  watch: {
+    '$route' () {
+      if (typeof window !== 'undefined' && window.innerWidth <= 640) {
+        this.minimized = true
+      }
+    },
+  },
   methods: {
     toggleSidebar (minimized) {
       this.minimized = minimized
+    },
+    closeSidebar () {
+      this.minimized = true
     },
   },
 }
@@ -58,10 +75,14 @@ export default {
   &__main {
     &--full-width-sidebar {
       @include media-breakpoint-down(xs) {
-        display: none;
+        display: block;
       }
     }
   }
+}
+
+.mobile-sidebar-backdrop {
+  display: none;
 }
 
 .va-page-layout {
@@ -115,9 +136,30 @@ export default {
     }
 
     > .va-sidebar:not(.va-sidebar--minimized) {
-      width: min(280px, 82vw) !important;
+      width: min(300px, 82vw) !important;
       max-width: 82vw !important;
-      box-shadow: 12px 0 32px rgba(15, 31, 49, .18);
+      box-shadow: 18px 0 42px rgba(10, 23, 38, .24);
+    }
+
+    > .va-sidebar {
+      transition: width .22s ease, transform .22s ease, box-shadow .22s ease;
+    }
+
+    .mobile-sidebar-backdrop {
+      position: fixed;
+      z-index: 95;
+      top: 108px;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: block;
+      width: 100%;
+      padding: 0;
+      background: rgba(15, 29, 45, .28);
+      border: 0;
+      outline: 0;
+      backdrop-filter: blur(1.5px);
+      -webkit-backdrop-filter: blur(1.5px);
     }
 
     .content-wrap {
