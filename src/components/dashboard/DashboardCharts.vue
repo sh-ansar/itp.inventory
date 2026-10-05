@@ -335,15 +335,31 @@ export default {
       min-height: auto;
       margin-bottom: .8rem !important;
 
+      .va-card__body {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+
       &__caption {
         margin-bottom: .7rem;
       }
     }
 
     .chart {
-      width: 100%;
-      max-width: 100%;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
       height: 255px;
+      overflow: hidden;
+
+      canvas {
+        display: block;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
 
       &--donut {
         height: 235px;
