@@ -301,7 +301,7 @@
                :buttons="editButtons"
               />
               <dx-filter-row
-               :visible="true"
+               :visible="false"
                apply-filter="onClick"
               />
               <dx-column-chooser
@@ -803,12 +803,17 @@ export default {
 
 .asset-kpi {
   position: relative;
+  min-height: 126px;
+  overflow: hidden;
+}
+
+.asset-kpi .va-card__body {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-height: 126px;
-  padding: .35rem .15rem;
-  overflow: hidden;
+  padding: 1.25rem 1.3rem !important;
 }
 
 .asset-kpi__accent {
