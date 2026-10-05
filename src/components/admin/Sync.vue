@@ -34,7 +34,7 @@
           </va-card>
         </div>
         <div class="flex xl12 xs12">
-          <va-card :title="$t('app.pages.sync.history')">
+          <va-card :title="$t('app.pages.sync.history')" class="data-table-card">
             <ClearPreferencesButton table_id="sync"></ClearPreferencesButton>
             <dx-data-grid
              :data-source="syncs"
