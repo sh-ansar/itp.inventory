@@ -1,7 +1,7 @@
 <template>
   <div class="row row-equal">
     <div class="flex xl12 xs12">
-      <va-card :title="$t('app.pages.directories.actualLocationsTitle')">
+      <va-card :title="$t('app.pages.directories.actualLocationsTitle')" class="data-table-card">
         <ClearPreferencesButton table_id="locations_fact" />
 
         <DxTreeList
