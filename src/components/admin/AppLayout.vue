@@ -66,13 +66,19 @@ export default {
 
 .va-page-layout {
   > .va-sidebar {
+    position: fixed !important;
     top: 72px !important;
-    height: calc(100vh - 72px) !important;
+    bottom: 0 !important;
+    height: auto !important;
     min-height: calc(100vh - 72px) !important;
+    overflow-y: auto;
+    background: #102033;
+    z-index: 100;
   }
 
   .content-wrap {
     min-height: calc(100vh - 72px);
+    background: #f3f6f9;
   }
 }
 
@@ -80,7 +86,8 @@ export default {
   .va-page-layout {
     > .va-sidebar {
       top: 116px !important;
-      height: calc(100vh - 116px) !important;
+      bottom: 0 !important;
+      height: auto !important;
       min-height: calc(100vh - 116px) !important;
     }
 
