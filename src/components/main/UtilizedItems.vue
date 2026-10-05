@@ -1,7 +1,7 @@
 <template>
   <div class="row row-equal operational-page">
     <div class="flex xl12 xs12">
-      <va-card :title="$t('menu.utilized-items')" class="operational-table-card">
+      <va-card :title="$t('menu.utilized-items')" class="operational-table-card data-table-card">
         <va-button
          small
          slot="actions"
