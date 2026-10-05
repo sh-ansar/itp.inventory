@@ -37,7 +37,7 @@
     <div class="flex xl12 xs12">
       <div class="row">
         <div class="flex xl12 xs12">
-          <va-card :title="$t('menu.items')" class="operational-table-card">
+          <va-card :title="$t('menu.items')" class="operational-table-card data-table-card">
             <va-button
              small
              slot="actions"
