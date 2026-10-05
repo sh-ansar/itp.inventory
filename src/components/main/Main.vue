@@ -814,6 +814,7 @@ export default {
   justify-content: space-between;
   min-height: 126px;
   padding: 1.25rem 1.3rem !important;
+  overflow-x: hidden;
 }
 
 .asset-kpi__accent {
