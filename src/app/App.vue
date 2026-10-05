@@ -271,17 +271,86 @@ body {
 }
 
 @media (max-width: 575px) {
+  html,
+  body,
+  #app {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
   .layout.gutter--xl {
-    padding: .75rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: .7rem .65rem 1.35rem;
+    overflow-x: hidden;
+  }
+
+  .layout .row,
+  .layout .flex {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .layout .dashboard,
+  .layout .operational-page,
+  .layout .inventory-page {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .layout .va-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .layout .va-card__header {
+    min-width: 0;
     padding-left: .9rem;
     padding-right: .9rem;
+    flex-wrap: wrap;
+    row-gap: .45rem;
   }
 
   .layout .va-card__body {
+    min-width: 0;
     padding: .75rem .8rem .9rem;
+    box-sizing: border-box;
+  }
+
+  .layout .dx-datagrid-search-panel {
+    width: 180px !important;
+    max-width: 56vw;
+  }
+
+  .operational-table-card .va-card__body,
+  .inventory-list-card .va-card__body,
+  .company-sync-card .va-card__body {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .operational-table-card .dx-datagrid,
+  .inventory-list-card .dx-datagrid {
+    min-width: 820px;
+    max-width: none;
+  }
+
+  .company-sync-card .company-sync-grid {
+    min-width: 760px;
+    max-width: none;
+  }
+
+  .layout .dx-toolbar {
+    min-width: max-content;
+  }
+
+  .layout .dx-pager {
+    min-width: 520px;
   }
 }
 </style>
