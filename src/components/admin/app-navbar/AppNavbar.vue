@@ -162,22 +162,24 @@ export default {
 
   &__company-zone {
     grid-area: company;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
     min-width: 0;
-    padding-top: 18px;
+    gap: 4px;
+    padding: 0;
   }
 
   &__company-label {
-    position: absolute;
-    z-index: 4;
-    top: 4px;
-    left: 3px;
-    color: #8a9aab;
-    font-size: .61rem;
+    position: static;
+    display: block;
+    padding-left: 3px;
+    color: #8292a5;
+    font-size: .58rem;
     line-height: 1;
     font-weight: 800;
-    letter-spacing: .1em;
+    letter-spacing: .11em;
     text-transform: uppercase;
     pointer-events: none;
   }
@@ -192,7 +194,7 @@ export default {
     }
 
     .va-select {
-      min-height: 42px;
+      min-height: 38px;
       padding: 0 !important;
       color: #263a50 !important;
       background: #f5f8fb !important;
@@ -214,7 +216,7 @@ export default {
     }
 
     .va-select__input-wrapper {
-      min-height: 40px;
+      min-height: 36px;
       display: flex;
       align-items: center;
       padding: 0 2.15rem 0 .85rem !important;
