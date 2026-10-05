@@ -425,20 +425,37 @@ export default {
     }
 
     &__actions {
-      min-width: 52px;
-      gap: 0;
+      width: 92px;
+      min-width: 92px;
+      gap: 4px;
       flex-wrap: nowrap;
       justify-self: end;
       overflow: visible;
     }
 
     &__profile {
-      display: none;
+      display: block;
+      width: 36px;
+      flex: 0 0 36px;
     }
 
     &__language {
       display: block;
-      flex: 0 0 auto;
+      flex: 0 0 52px;
+    }
+
+    .profile-dropdown__anchor {
+      width: 36px;
+      min-width: 36px;
+      min-height: 36px;
+      padding: 3px !important;
+      box-sizing: border-box;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .profile-dropdown__anchor > .va-icon {
+      display: none !important;
     }
 
     &__avatar {
