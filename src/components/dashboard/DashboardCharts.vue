@@ -320,4 +320,40 @@ export default {
     }
   }
 }
+
+@media (max-width: 640px) {
+  .dashboard-charts {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+
+    .flex {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    .dashboard-panel {
+      min-height: auto;
+      margin-bottom: .8rem !important;
+
+      &__caption {
+        margin-bottom: .7rem;
+      }
+    }
+
+    .chart {
+      width: 100%;
+      max-width: 100%;
+      height: 255px;
+
+      &--donut {
+        height: 235px;
+        max-height: 235px;
+      }
+    }
+
+    .inventory-progress {
+      padding: .72rem 0;
+    }
+  }
+}
 </style>
