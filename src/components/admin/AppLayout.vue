@@ -96,4 +96,37 @@ export default {
     }
   }
 }
+
+@media (max-width: 640px) {
+  .va-page-layout {
+    > .va-sidebar {
+      top: 108px !important;
+      min-height: calc(100vh - 108px) !important;
+    }
+
+    > .va-sidebar.va-sidebar--minimized {
+      width: 0 !important;
+      min-width: 0 !important;
+      max-width: 0 !important;
+      overflow: hidden !important;
+      transform: translateX(-100%);
+      pointer-events: none;
+      box-shadow: none !important;
+    }
+
+    > .va-sidebar:not(.va-sidebar--minimized) {
+      width: min(280px, 82vw) !important;
+      max-width: 82vw !important;
+      box-shadow: 12px 0 32px rgba(15, 31, 49, .18);
+    }
+
+    .content-wrap {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-height: calc(100vh - 108px);
+      margin-left: 0 !important;
+      overflow-x: hidden;
+    }
+  }
+}
 </style>

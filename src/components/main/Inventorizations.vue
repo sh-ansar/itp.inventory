@@ -941,4 +941,56 @@ export default {
     width: 100%;
   }
 }
+
+@media (max-width: 640px) {
+  .inventory-page {
+    width: 100%;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .inventory-page > .flex,
+  .inventory-page > .flex > .row > .flex {
+    min-width: 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .inventory-page > .flex > .row,
+  .inventory-create-grid {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .inventory-create-grid > .flex {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .inventory-create-card,
+  .inventory-list-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .inventory-create-actions {
+    gap: .5rem;
+    padding-top: .65rem;
+  }
+
+  .inventory-create-actions .va-button {
+    min-width: 0;
+    min-height: 42px;
+  }
+
+  .inventory-page >>> .va-card__header {
+    flex-wrap: wrap;
+    row-gap: .45rem;
+  }
+
+  .inventory-page >>> .dx-datagrid-search-panel {
+    width: 180px !important;
+    max-width: 56vw;
+  }
+}
 </style>

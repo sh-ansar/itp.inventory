@@ -870,4 +870,54 @@ export default {
   width: 28px !important;
   min-width: 28px !important;
 }
+
+@media (max-width: 640px) {
+  .operational-page {
+    width: 100%;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .operational-page > .flex,
+  .operational-page > .flex > .row > .flex {
+    min-width: 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .operational-page > .flex > .row,
+  .operational-kpis {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .operational-kpis {
+    gap: .65rem;
+  }
+
+  .asset-kpi,
+  .asset-kpi .va-card__body {
+    min-height: 104px;
+  }
+
+  .asset-kpi .va-card__body {
+    padding: 1rem 1.05rem !important;
+  }
+
+  .asset-kpi__value {
+    font-size: 1.7rem;
+  }
+
+  .asset-kpi__label {
+    margin-top: .4rem;
+    font-size: .84rem;
+  }
+
+  .asset-kpi__icon {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+    margin-right: 0;
+  }
+}
 </style>

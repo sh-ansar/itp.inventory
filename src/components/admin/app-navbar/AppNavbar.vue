@@ -403,12 +403,19 @@ export default {
     }
   }
 
-  @media (max-width: 480px) {
-    padding-left: .7rem;
-    padding-right: .7rem;
+  @media (max-width: 640px) {
+    grid-template-rows: 54px 46px;
+    height: 108px;
+    padding: 4px .65rem;
+    column-gap: .35rem;
+
+    &__brand-zone {
+      gap: .4rem;
+    }
 
     &__brand {
-      width: 142px;
+      width: 132px;
+      max-width: 132px;
     }
 
     &__menu-button {
@@ -417,10 +424,50 @@ export default {
       flex-basis: 34px;
     }
 
+    &__actions {
+      min-width: max-content;
+      gap: .2rem;
+      flex-wrap: nowrap;
+    }
+
+    &__profile {
+      display: block;
+      flex: 0 0 36px;
+    }
+
+    .profile-dropdown__anchor {
+      width: 36px;
+      min-width: 36px;
+      min-height: 36px;
+      justify-content: center;
+      padding: .15rem !important;
+      overflow: hidden;
+    }
+
     &__avatar {
       width: 28px;
       height: 28px;
       flex-basis: 28px;
+    }
+
+    &__company-zone {
+      width: 100%;
+    }
+
+    &__company-select .va-select,
+    &__company-select .va-select__input-wrapper {
+      min-height: 38px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    &__brand {
+      width: 114px;
+      max-width: 114px;
+    }
+
+    &__actions {
+      gap: .1rem;
     }
   }
 }
