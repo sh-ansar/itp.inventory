@@ -1,5 +1,5 @@
 <template>
-  <va-card :title="$t('app.dashboard.latestCompanySyncs')" class="company-sync-card">
+  <va-card :title="$t('app.dashboard.latestCompanySyncs')" class="company-sync-card data-table-card">
     <va-button
       small
       slot="actions"
