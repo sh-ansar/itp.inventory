@@ -1,7 +1,7 @@
 <template>
   <div class="row row-equal">
     <div class="flex xl12 xs12">
-      <va-card :title="$t('menu.manage-roles')">
+      <va-card :title="$t('menu.manage-roles')" class="data-table-card">
         <ClearPreferencesButton table_id="manage_roles"></ClearPreferencesButton>
         <dx-data-grid
          :data-source="users"
