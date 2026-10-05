@@ -3,7 +3,7 @@
     <div class="flex xl12 xs12">
       <div class="row">
         <div class="flex xl12 xs12">
-          <va-card :title="$t('app.pages.settings.title')">
+          <va-card :title="$t('app.pages.settings.title')" class="data-table-card">
 <!--            <va-button-->
 <!--             small-->
 <!--             slot="actions"-->
