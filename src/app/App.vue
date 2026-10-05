@@ -268,6 +268,24 @@ body {
   .layout .dx-treelist {
     font-size: 12px;
   }
+
+  .operational-table-card .va-card__body,
+  .inventory-list-card .va-card__body,
+  .company-sync-card .va-card__body {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .operational-table-card .dx-datagrid,
+  .inventory-list-card .dx-datagrid {
+    min-width: 980px;
+    max-width: none;
+  }
+
+  .company-sync-card .company-sync-grid {
+    min-width: 900px;
+    max-width: none;
+  }
 }
 
 @media (max-width: 575px) {
@@ -288,10 +306,23 @@ body {
     overflow-x: hidden;
   }
 
-  .layout .row,
+  .layout .row {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box;
+  }
+
   .layout .flex {
     min-width: 0;
     max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .layout .flex.xs12 {
+    width: 100%;
+    flex-basis: 100%;
   }
 
   .layout .dashboard,
@@ -316,6 +347,31 @@ body {
     row-gap: .45rem;
   }
 
+  .layout .va-card__header-inner {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    min-width: 0;
+    gap: .5rem;
+  }
+
+  .layout .va-card__header-title {
+    min-width: 0;
+    flex: 1 1 100%;
+  }
+
+  .layout .va-card__header-actions {
+    display: flex;
+    flex: 1 1 100%;
+    max-width: 100%;
+    margin-left: 0 !important;
+    justify-content: flex-start;
+  }
+
+  .layout .va-card__header-actions .va-button {
+    max-width: 100%;
+  }
+
   .layout .va-card__body {
     min-width: 0;
     padding: .75rem .8rem .9rem;
@@ -336,12 +392,12 @@ body {
 
   .operational-table-card .dx-datagrid,
   .inventory-list-card .dx-datagrid {
-    min-width: 820px;
+    min-width: 900px;
     max-width: none;
   }
 
   .company-sync-card .company-sync-grid {
-    min-width: 760px;
+    min-width: 820px;
     max-width: none;
   }
 
