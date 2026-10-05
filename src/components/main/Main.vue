@@ -1,29 +1,35 @@
 <template>
-  <div class="row row-equal">
+  <div class="row row-equal operational-page">
     <div class="flex xl12 xs12">
-      <div class="row">
-        <div
-         class="flex xs12 sm4"
-        >
-          <va-card class="mb-4" color="success">
-            <p class="display-2 mb-0" style="color: white">{{ count.on_balance }}</p>
-            <p>{{ $t('app.pages.items.onBalance') }}</p>
+      <div class="row operational-kpis">
+        <div class="flex xs12 sm4">
+          <va-card class="asset-kpi asset-kpi--success">
+            <div class="asset-kpi__accent"></div>
+            <div>
+              <p class="asset-kpi__value">{{ count.on_balance }}</p>
+              <p class="asset-kpi__label">{{ $t('app.pages.items.onBalance') }}</p>
+            </div>
+            <span class="asset-kpi__icon fa fa-check"></span>
           </va-card>
         </div>
-        <div
-         class="flex xs12 sm4"
-        >
-          <va-card class="mb-4" color="info">
-            <p class="display-2 mb-0" style="color: white">{{ count.written_off }}</p>
-            <p>{{ $t('app.pages.items.offBalance') }}</p>
+        <div class="flex xs12 sm4">
+          <va-card class="asset-kpi asset-kpi--info">
+            <div class="asset-kpi__accent"></div>
+            <div>
+              <p class="asset-kpi__value">{{ count.written_off }}</p>
+              <p class="asset-kpi__label">{{ $t('app.pages.items.offBalance') }}</p>
+            </div>
+            <span class="asset-kpi__icon fa fa-exchange"></span>
           </va-card>
         </div>
-        <div
-         class="flex xs12 sm4"
-        >
-          <va-card class="mb-4" color="danger">
-            <p class="display-2 mb-0" style="color: white">{{ count.removed }}</p>
-            <p>{{ $t('app.pages.items.utilized') }}</p>
+        <div class="flex xs12 sm4">
+          <va-card class="asset-kpi asset-kpi--danger">
+            <div class="asset-kpi__accent"></div>
+            <div>
+              <p class="asset-kpi__value">{{ count.removed }}</p>
+              <p class="asset-kpi__label">{{ $t('app.pages.items.utilized') }}</p>
+            </div>
+            <span class="asset-kpi__icon fa fa-archive"></span>
           </va-card>
         </div>
       </div>
@@ -31,7 +37,7 @@
     <div class="flex xl12 xs12">
       <div class="row">
         <div class="flex xl12 xs12">
-          <va-card :title="$t('menu.items')">
+          <va-card :title="$t('menu.items')" class="operational-table-card">
             <va-button
              small
              slot="actions"
@@ -295,16 +301,16 @@
                :buttons="editButtons"
               />
               <dx-filter-row
-               :visible="true"
+               :visible="false"
                apply-filter="onClick"
               />
               <dx-column-chooser
                :enabled="true"
               />
-              <dx-group-panel :visible="true"/>
+              <dx-group-panel :visible="false"/>
               <dx-search-panel
                :visible="true"
-               :highlight-case-sensitive="true"
+               :highlight-case-sensitive="false"
               />
               <dx-grouping :auto-expand-all="false"/>
               <dx-paging :page-size="10"/>
@@ -787,12 +793,81 @@ export default {
 </script>
 
 <style>
-  .color-green {
-    background-color: #afe5b1;
-    color: #ffffff;
-  }
-  .dx-command-select {
-    width: 20px!important;
-    min-width: 20px!important;
-  }
+.operational-page {
+  padding-bottom: 2rem;
+}
+
+.operational-kpis {
+  margin-bottom: .3rem;
+}
+
+.asset-kpi {
+  position: relative;
+  min-height: 126px;
+  overflow: hidden;
+}
+
+.asset-kpi .va-card__body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 126px;
+  padding: 1.25rem 1.3rem !important;
+}
+
+.asset-kpi__accent {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 5px;
+}
+
+.asset-kpi__value {
+  margin: 0;
+  color: #17283d;
+  font-size: 2rem;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.asset-kpi__label {
+  margin: .55rem 0 0;
+  color: #42566d;
+  font-size: .92rem;
+  font-weight: 600;
+}
+
+.asset-kpi__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  margin-right: .25rem;
+  border-radius: 12px;
+}
+
+.asset-kpi--success .asset-kpi__accent { background: #2ebd75; }
+.asset-kpi--success .asset-kpi__icon { color: #20965c; background: rgba(46, 189, 117, .12); }
+.asset-kpi--info .asset-kpi__accent { background: #22b3c1; }
+.asset-kpi--info .asset-kpi__icon { color: #168a95; background: rgba(34, 179, 193, .12); }
+.asset-kpi--danger .asset-kpi__accent { background: #ee5a5a; }
+.asset-kpi--danger .asset-kpi__icon { color: #c54141; background: rgba(238, 90, 90, .11); }
+
+.operational-table-card {
+  margin-top: .35rem;
+}
+
+.color-green {
+  color: #2e654d !important;
+  background-color: #e8f6ee !important;
+}
+
+.dx-command-select {
+  width: 28px !important;
+  min-width: 28px !important;
+}
 </style>

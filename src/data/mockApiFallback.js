@@ -359,14 +359,14 @@ const assetTemplates = [
   { name: 'Термопринтер TSC TE310', cost: 244000, account: '2410' },
 ]
 
-const extraItems = Array.from({ length: 36 }, (_, index) => {
+const extraItems = Array.from({ length: 1411 }, (_, index) => {
   const id = index + 8
   const companyId = (index % 4) + 1
   const profile = companyProfiles[companyId]
   const location = profile.locations[index % profile.locations.length]
   const person = profile.people[index % profile.people.length]
   const template = assetTemplates[index % assetTemplates.length]
-  const statusId = index % 17 === 0 ? '3' : (index % 9 === 0 ? '2' : '1')
+  const statusId = index < 1279 ? '1' : (index < 1371 ? '2' : '3')
   const status = statusId === '3' ? 'Утилизирован' : (statusId === '2' ? 'За балансом' : 'На балансе')
   const year = 2022 + (index % 5)
   const month = String((index % 12) + 1).padStart(2, '0')
@@ -489,13 +489,34 @@ const inventories = [
     file_name: 'inventory-admin-2026-09-18.xlsx',
     file_hashname: 'inventory-admin-2026-09-18.xlsx',
   },
-]
+].concat(Array.from({ length: 12 }, (_, index) => {
+  const id = index + 7
+  const company = companies[index % companies.length]
+  const person = persons[(index + 2) % persons.length]
+  const completed = index % 4 !== 0
+  const day = String(16 - index).padStart(2, '0')
+  return {
+    id,
+    date: day + '.09.2026 ' + String(9 + (index % 8)).padStart(2, '0') + ':' + (index % 2 ? '30' : '00'),
+    author: person.name,
+    status: completed ? 'Завершено' : 'В процессе',
+    companies: company.name,
+    persons: person.name,
+    locations: locations[(index + 3) % locations.length].name,
+    completed,
+    date_completed: completed ? day + '.09.2026 18:10' : null,
+    file_name: completed ? 'inventory-' + day + '-09-2026.xlsx' : '',
+    file_hashname: completed ? 'inventory-' + day + '-09-2026.xlsx' : '',
+  }
+}))
 
-const inventoryItems = items.slice(0, 5).map((item, index) => ({
+const inventoryItems = items.slice(0, 12).map((item, index) => ({
   ...item,
-  checked: index < 4,
-  datetime_checked: index < 4 ? '05.10.2026 10:' + String(10 + index * 4).padStart(2, '0') : '',
-  commentary: index === 3 ? 'Перемещено в соседний кабинет' : '',
+  checked: index < 9,
+  datetime_checked: index < 9 ? '05.10.2026 10:' + String(10 + index * 4).padStart(2, '0') : '',
+  commentary: index === 3
+    ? 'Перемещено в соседний кабинет'
+    : (index === 7 ? 'Проверено ответственным лицом' : ''),
   fact_location: item.location,
 }))
 
@@ -515,7 +536,20 @@ const syncs = [
 const syncChanges = [
   { id: 1, name: 'Ноутбук Dell Latitude 5540', company: 'ITP Mining', code: 'OS-000124', inventory_number: 'INV-2026-00124', change_type: '1', change_column: 'current_cost', old_value: '532000', new_value: '519000', date_change: '05.10.2026 12:14', event: 'Изменение стоимости', location: 'Офис — 2 этаж' },
   { id: 2, name: 'Сервер Dell PowerEdge R470', company: 'ITP Mining', code: 'OS-000131', inventory_number: 'INV-2026-00131', change_type: '3', change_column: 'location', old_value: 'Склад', new_value: 'Центральный склад', date_change: '05.10.2026 12:14', event: 'Перемещение', location: 'Центральный склад' },
-]
+].concat(items.slice(8, 20).map((item, index) => ({
+  id: index + 3,
+  name: item.name,
+  company: item.company,
+  code: item.code,
+  inventory_number: item.inventory_number,
+  change_type: String((index % 3) + 1),
+  change_column: index % 2 ? 'location' : 'responsible_person',
+  old_value: index % 2 ? 'Предыдущее расположение' : 'Предыдущий МОЛ',
+  new_value: index % 2 ? item.location : item.responsible_person,
+  date_change: '0' + (4 - (index % 4)) + '.10.2026 1' + (index % 8) + ':20',
+  event: index % 2 ? 'Изменение расположения' : 'Смена ответственного лица',
+  location: item.location,
+})))
 
 const companySyncs = [
   { name: 'ITP Mining', date_time: '05.10.2026 12:14', status: 'Завершено', created: 28, changed: 14, ones: 6, utilized: 1, outbalanced: 3 },
@@ -528,11 +562,24 @@ const roles = [
   { id: 1, fio: 'Александр Иванов', is_manager: true },
   { id: 2, fio: 'Нино Беридзе', is_manager: true },
   { id: 3, fio: 'Георгий Метревели', is_manager: false },
+  { id: 4, fio: 'Айдана Сарсенова', is_manager: true },
+  { id: 5, fio: 'Ерлан Касымов', is_manager: false },
+  { id: 6, fio: 'Мариам Капанадзе', is_manager: false },
+  { id: 7, fio: 'Тимур Омаров', is_manager: true },
+  { id: 8, fio: 'Данияр Ахметов', is_manager: true },
+  { id: 9, fio: 'Анна Волкова', is_manager: false },
+  { id: 10, fio: 'Бекзат Нургалиев', is_manager: false },
 ]
 
 const guests = [
   { id: 11, fio: 'Мария Орлова', is_guest: true },
   { id: 12, fio: 'Леван Джапаридзе', is_guest: false },
+  { id: 13, fio: 'София Ким', is_guest: true },
+  { id: 14, fio: 'Алексей Романов', is_guest: false },
+  { id: 15, fio: 'Гурам Мачавариани', is_guest: true },
+  { id: 16, fio: 'Алия Жумабаева', is_guest: false },
+  { id: 17, fio: 'Николай Петров', is_guest: true },
+  { id: 18, fio: 'Тамара Кобахидзе', is_guest: false },
 ]
 
 const lineChart = {
@@ -545,6 +592,21 @@ const lineChart = {
 }
 
 const counts = { on_balance: 1284, written_off: 93, removed: 41 }
+
+function itemCounts (config) {
+  const params = (config && config.params) || {}
+  let source = items
+
+  if (params.company_id !== undefined && params.company_id !== null && params.company_id !== '') {
+    source = source.filter(item => Number(item.company_id) === Number(params.company_id))
+  }
+
+  return {
+    on_balance: source.filter(item => String(item.status_id) === '1').length,
+    written_off: source.filter(item => String(item.status_id) === '2').length,
+    removed: source.filter(item => String(item.status_id) === '3').length,
+  }
+}
 
 const inventoryProgress = [
   { value: 78, maxvalue: 100, color: 'success', textKey: 'app.dashboard.inventoryCentralWarehouse' },
@@ -635,6 +697,10 @@ export function getMockApiData (config) {
 
   if (url === GET_ITEMS) {
     return clone(filteredItems(config))
+  }
+
+  if (url === GET_ITEMS_COUNT) {
+    return clone(itemCounts(config))
   }
 
   if (Object.prototype.hasOwnProperty.call(responseMap, url)) {

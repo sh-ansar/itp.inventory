@@ -1,7 +1,7 @@
 <template>
   <div class="row row-equal">
     <div class="flex xl12 xs12">
-      <va-card :title="$t('app.pages.roles.title')">
+      <va-card :title="$t('menu.manage-roles')">
         <ClearPreferencesButton table_id="manage_roles"></ClearPreferencesButton>
         <dx-data-grid
          :data-source="users"
@@ -54,7 +54,7 @@
           />
           <dx-search-panel
            :visible="true"
-           :highlight-case-sensitive="true"
+           :highlight-case-sensitive="false"
           />
           <dx-paging :page-size="10"/>
         </dx-data-grid>
