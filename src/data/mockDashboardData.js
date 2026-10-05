@@ -1,0 +1,97 @@
+export const mockDashboard = {
+  counts: {
+    on_balance: 1284,
+    written_off: 93,
+    removed: 41,
+  },
+  activity: {
+    syncs: 24,
+    added: 186,
+    changed: 74,
+    ones: 42,
+    utilized: 8,
+    outbalanced: 17,
+  },
+  lineChart: {
+    labels: ['29.09', '30.09', '01.10', '02.10', '03.10', '04.10', '05.10'],
+    datasets: [
+      {
+        label: 'Добавлено',
+        data: [18, 26, 21, 34, 29, 31, 27],
+        fill: false,
+      },
+      {
+        label: 'Изменено',
+        data: [9, 14, 12, 18, 11, 16, 13],
+        fill: false,
+      },
+      {
+        label: 'События 1С',
+        data: [5, 7, 6, 8, 4, 7, 5],
+        fill: false,
+      },
+    ],
+  },
+  inventories: [
+    {
+      value: 78,
+      maxvalue: 100,
+      color: 'success',
+      textKey: 'app.dashboard.inventoryCentralWarehouse',
+    },
+    {
+      value: 46,
+      maxvalue: 62,
+      color: 'info',
+      textKey: 'app.dashboard.inventoryProductionSite',
+    },
+    {
+      value: 19,
+      maxvalue: 40,
+      color: 'warning',
+      textKey: 'app.dashboard.inventoryOfficeAssets',
+    },
+  ],
+  companySyncs: [
+    {
+      name: 'ITP Mining',
+      date_time: '05.10.2026 12:14',
+      status: 'Завершено',
+      created: 28,
+      changed: 14,
+      ones: 6,
+      utilized: 1,
+      outbalanced: 3,
+    },
+    {
+      name: 'ITP Kazakhstan',
+      date_time: '05.10.2026 11:47',
+      status: 'Завершено',
+      created: 16,
+      changed: 9,
+      ones: 4,
+      utilized: 0,
+      outbalanced: 2,
+    },
+    {
+      name: 'ITP Service',
+      date_time: '05.10.2026 10:26',
+      status: 'В процессе',
+      created: 7,
+      changed: 5,
+      ones: 2,
+      utilized: 0,
+      outbalanced: 0,
+    },
+    {
+      name: 'ITP Logistics',
+      date_time: '04.10.2026 18:32',
+      status: 'Завершено',
+      created: 21,
+      changed: 11,
+      ones: 5,
+      utilized: 2,
+      outbalanced: 1,
+    },
+  ],
+}
