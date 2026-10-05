@@ -1,7 +1,7 @@
 <template>
-  <div class="row row-equal">
+  <div class="row row-equal operational-page">
     <div class="flex xl12 xs12">
-      <va-card :title="$t('menu.utilized-items')">
+      <va-card :title="$t('menu.utilized-items')" class="operational-table-card">
         <va-button
          small
          slot="actions"
@@ -226,10 +226,10 @@
           <dx-column-chooser
            :enabled="true"
           />
-          <dx-group-panel :visible="true"/>
+          <dx-group-panel :visible="false"/>
           <dx-search-panel
            :visible="true"
-           :highlight-case-sensitive="true"
+           :highlight-case-sensitive="false"
           />
           <dx-grouping :auto-expand-all="false"/>
           <dx-paging :page-size="10"/>
@@ -522,8 +522,16 @@ export default {
 </script>
 
 <style>
-  .color-green {
-    background-color: #afe5b1;
-    color: #ffffff;
-  }
+.operational-page {
+  padding-bottom: 2rem;
+}
+
+.operational-table-card {
+  margin-top: .1rem;
+}
+
+.color-green {
+  color: #2e654d !important;
+  background-color: #e8f6ee !important;
+}
 </style>
