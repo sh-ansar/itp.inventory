@@ -179,7 +179,18 @@
                cell-template="fileCellTemplate"
               />
               <template #fileCellTemplate="data">
-                <a :href="uploadsPath+'/'+data.data.data.file_hashname" :title="data.data.value" target="_blank">{{data.data.value}}</a>
+                <a
+                  v-if="data.data.value && !isMockMode"
+                  :href="uploadsPath+'/'+data.data.data.file_hashname"
+                  :title="data.data.value"
+                  target="_blank"
+                >{{data.data.value}}</a>
+                <a
+                  v-else-if="data.data.value"
+                  href="#"
+                  :title="data.data.value"
+                  @click.prevent="downloadMockInventoryReport(data.data.data)"
+                >{{data.data.value}}</a>
               </template>
               <dx-column
                type="buttons"
@@ -508,6 +519,7 @@ export default {
       showItemsModal: false,
       showItemsListModal: false,
       uploadsPath: UPLOADS,
+      isMockMode: IS_MOCK_MODE,
       inventorizations: [],
       filterItems: [],
       currentFilterItem: [],
