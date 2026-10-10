@@ -11,9 +11,8 @@
           :children="item.children"
         >
           <va-sidebar-link
-            v-for="(subMenuItem, key) in item.children"
+            v-for="(subMenuItem, key) in visibleChildren(item)"
             :key="key"
-            v-if="checkPrivilege(subMenuItem)"
             :to="{ name: subMenuItem.name }"
             :title="$t(subMenuItem.displayName)"
           />
@@ -71,11 +70,11 @@ export default {
       }
     }
   },
-  // methods: {
-  //   checkPrivilege(item) {
-  //
-  //   }
-  // }
+  methods: {
+    visibleChildren (item) {
+      return (item.children || []).filter(this.checkPrivilege)
+    },
+  },
 }
 
 </script>
