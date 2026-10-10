@@ -472,7 +472,6 @@ import {
   DxFilterRow,
   DxSelection
 } from 'devextreme-vue/data-grid'
-import Multiselect from 'vue-multiselect'
 import { mapGetters } from 'vuex'
 import 'devextreme/data/odata/store'
 import VaMultipleSelect from "../ui/select/VaMultipleSelect";
@@ -480,7 +479,7 @@ import {
   CREATE_INVENTORY_CHECK, FORM_REPORT, GET_COMPANIES,
   GET_INVENTORIZATIONS, GET_INVENTORY_CHECK_ITEMS,
   GET_ITEMS,
-  GET_LOCATIONS, GET_LOCATIONS_FOR_FEW_COMPANIES,
+  GET_LOCATIONS_FOR_FEW_COMPANIES,
   GET_RESPONSIBLE_PERSONS, LOAD_USER_PREFERENCES, SAVE_USER_PREFERENCES, SET_INV_COMPLETE_STATUS, UPLOAD_REPORT_FILE
 } from "../../consts/urls";
 import {UPLOADS} from "../../consts/common";
@@ -493,7 +492,6 @@ export default {
     DxColumn,
     DxButton,
     DxGrouping,
-    Multiselect,
     VaMultipleSelect,
     DxGroupPanel,
     DxStateStoring,
@@ -578,7 +576,7 @@ export default {
     async customLoad(table_id) {
       let state = await this.$http.get(LOAD_USER_PREFERENCES,{
         params: {
-          table_id: table_id
+          table_id: tableId
         }
       });
       return JSON.parse(state.data);
@@ -589,24 +587,24 @@ export default {
       }
       let stateStr = JSON.stringify(state);
       this.$http.post(SAVE_USER_PREFERENCES,{
-        table_id: table_id,
+        table_id: tableId,
         json_string: stateStr
       });
     },
     async customLoadInv() {
-      return await this.customLoad('invs');
+      return this.customLoad('invs');
     },
     customSaveInv(state) {
       this.customSave(state, 'invs');
     },
     async customLoadInvList() {
-      return await this.customLoad('inv_list');
+      return this.customLoad('inv_list');
     },
     customSaveInvList(state) {
       this.customSave(state, 'inv_list');
     },
     async customLoadSelectionList() {
-      return await this.customLoad('inv_selection_list');
+      return this.customLoad('inv_selection_list');
     },
     customSaveSelectionList(state) {
       this.customSave(state, 'inv_selection_list');
