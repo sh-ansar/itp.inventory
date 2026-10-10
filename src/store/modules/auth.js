@@ -66,7 +66,7 @@ const actions = {
 
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
           commit(AUTH_CONSTS.AUTH_SUCCESS, token)
-          dispatch(AUTH_USER_INFO)
+          dispatch(AUTH_CONSTS.AUTH_USER_INFO)
             .then(() => {
               resolve(resp)
             })
