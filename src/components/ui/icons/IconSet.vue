@@ -111,6 +111,7 @@ export default {
       for (let set of this.sets) {
         if (set.href === this.name) return set
       }
+      return null
     },
     filteredLists () {
       if (!this.search) {
