@@ -167,7 +167,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(data, index) in tableData" :key="index" v-if="index !== 0">
+              <tr v-for="(data, index) in tableData.slice(1)" :key="index">
                 <td v-for="(i, index) in data" :key="index">{{i}}</td>
               </tr>
               </tbody>

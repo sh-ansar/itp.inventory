@@ -1,5 +1,11 @@
 export const appMessages = {
   ru: {
+    auth: {
+      validation: {
+        emailRequired: 'Необходимо ввести логин',
+        passwordRequired: 'Необходимо ввести пароль',
+      },
+    },
     app: {
       common: {
         company: 'Компания',
@@ -11,6 +17,9 @@ export const appMessages = {
         showAll: 'Показать все',
         toSynchronizations: 'К синхронизациям',
         resetTable: 'Сбросить настройки таблицы',
+        authErrorTitle: 'Ошибка авторизации',
+        invalidCredentials: 'Неверный логин или пароль',
+        connectionError: 'Не удалось связаться с сервером. Проверьте подключение и повторите попытку.',
       },
       dashboard: {
         eyebrow: 'УЧЁТ ОСНОВНЫХ СРЕДСТВ',
@@ -89,6 +98,12 @@ export const appMessages = {
   },
 
   en: {
+    auth: {
+      validation: {
+        emailRequired: 'Login is required',
+        passwordRequired: 'Password is required',
+      },
+    },
     app: {
       common: {
         company: 'Company',
@@ -100,6 +115,9 @@ export const appMessages = {
         showAll: 'Show all',
         toSynchronizations: 'Open synchronizations',
         resetTable: 'Reset table settings',
+        authErrorTitle: 'Sign-in error',
+        invalidCredentials: 'Invalid login or password',
+        connectionError: 'Unable to reach the server. Check your connection and try again.',
       },
       dashboard: {
         eyebrow: 'FIXED ASSET ACCOUNTING',
@@ -212,6 +230,12 @@ export const appMessages = {
   },
 
   ka: {
+    auth: {
+      validation: {
+        emailRequired: 'შეიყვანეთ მომხმარებლის სახელი',
+        passwordRequired: 'შეიყვანეთ პაროლი',
+      },
+    },
     app: {
       common: {
         company: 'კომპანია',
@@ -223,6 +247,9 @@ export const appMessages = {
         showAll: 'ყველას ჩვენება',
         toSynchronizations: 'სინქრონიზაციებზე გადასვლა',
         resetTable: 'ცხრილის პარამეტრების განულება',
+        authErrorTitle: 'ავტორიზაციის შეცდომა',
+        invalidCredentials: 'მომხმარებლის სახელი ან პაროლი არასწორია',
+        connectionError: 'სერვერთან დაკავშირება ვერ მოხერხდა. შეამოწმეთ კავშირი და სცადეთ ხელახლა.',
       },
       dashboard: {
         eyebrow: 'ძირითადი საშუალებების აღრიცხვა',

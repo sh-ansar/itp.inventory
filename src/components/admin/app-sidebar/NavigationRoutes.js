@@ -3,7 +3,7 @@ export const navigationRoutes = {
     name: '/',
     displayName: 'navigationRoutes.home',
   },
-  /*routes: [
+  /* routes: [
     {
       name: 'dashboard',
       displayName: 'menu.dashboard',
@@ -216,14 +216,14 @@ export const navigationRoutes = {
         },
       ],
     },
-  ],*/
+  ], */
   routes: [
     {
       name: 'dashboard',
       displayName: 'menu.home',
       meta: {
-        iconClass: 'vuestic-iconset-graph'
-      }
+        iconClass: 'vuestic-iconset-graph',
+      },
     },
     {
       name: 'main',
@@ -274,14 +274,14 @@ export const navigationRoutes = {
           name: 'locations-fact',
           displayName: 'menu.locations-fact',
         },
-      ]
+      ],
     },
     {
       name: 'admin',
       displayName: 'menu.admin',
       meta: {
         iconClass: 'vuestic-iconset-dashboard',
-        roles: ['canManager']
+        roles: ['canManager'],
       },
       disabled: true,
       children: [
@@ -293,14 +293,14 @@ export const navigationRoutes = {
           name: 'manage-roles',
           displayName: 'menu.manage-roles',
           meta: {
-            roles: ['canAdmin']
+            roles: ['canAdmin'],
           },
         },
         {
           name: 'manage-guests',
           displayName: 'menu.manage-guests',
           meta: {
-            roles: ['canAdmin']
+            roles: ['canAdmin'],
           },
         },
         // {
@@ -309,8 +309,8 @@ export const navigationRoutes = {
         // },
         {
           name: 'sync-settings',
-          displayName: 'menu.syncConfig'
-        }
+          displayName: 'menu.syncConfig',
+        },
       ],
     },
   ],

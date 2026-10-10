@@ -1,6 +1,6 @@
-import {GET_COMPANIES_ACTION, SET_COMPANIES, SET_COMPANY} from "../../consts/common";
-import { axios } from '../../app/main';
-import {GET_COMPANIES} from "../../consts/urls";
+import { GET_COMPANIES_ACTION, SET_COMPANIES, SET_COMPANY } from '../../consts/common'
+import { axios } from '../../app/main'
+import { GET_COMPANIES } from '../../consts/urls'
 
 const state = {
   sidebar: {
@@ -30,24 +30,24 @@ const mutations = {
     state.isLoading = isLoading
   },
   [SET_COMPANIES]: (state, companies) => {
-    state.companies = companies;
+    state.companies = companies
   },
   [SET_COMPANY]: (state, company) => {
-    state.company = company;
-  }
+    state.company = company
+  },
 }
 
 const actions = {
-  [GET_COMPANIES_ACTION]: ({commit, dispatch}) => {
+  [GET_COMPANIES_ACTION]: ({ commit, dispatch }) => {
     axios.get(GET_COMPANIES, {
       params: {
-        is_deleted: 0
-      }
+        is_deleted: 0,
+      },
     })
       .then((response) => {
-        commit(SET_COMPANIES, response.data);
+        commit(SET_COMPANIES, response.data)
       })
-  }
+  },
 }
 
 export default {

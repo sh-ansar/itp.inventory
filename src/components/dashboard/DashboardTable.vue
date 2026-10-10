@@ -30,7 +30,7 @@
       :loading="loading"
       hoverable
     >
-      <template slot="icon" slot-scope="props">
+      <template slot="icon">
         <va-icon name="fa fa-user" color="secondary" />
       </template>
 

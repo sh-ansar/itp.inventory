@@ -11,9 +11,8 @@
           :children="item.children"
         >
           <va-sidebar-link
-            v-for="(subMenuItem, key) in item.children"
+            v-for="(subMenuItem, key) in visibleChildren(item)"
             :key="key"
-            v-if="checkPrivilege(subMenuItem)"
             :to="{ name: subMenuItem.name }"
             :title="$t(subMenuItem.displayName)"
           />
@@ -53,29 +52,29 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'canAdmin', 'canManager'
+      'canAdmin', 'canManager',
     ]),
-    checkPrivilege() {
+    checkPrivilege () {
       return (item) => {
-        if(item.meta && item.meta.roles) {
-          let val = false;
+        if (item.meta && item.meta.roles) {
+          let val = false
           item.meta.roles.forEach(el => {
-            if(this[el]) {
-              val = true;
+            if (this[el]) {
+              val = true
             }
-          });
-          return val;
+          })
+          return val
         } else {
-          return true;
+          return true
         }
       }
-    }
+    },
   },
-  // methods: {
-  //   checkPrivilege(item) {
-  //
-  //   }
-  // }
+  methods: {
+    visibleChildren (item) {
+      return (item.children || []).filter(this.checkPrivilege)
+    },
+  },
 }
 
 </script>

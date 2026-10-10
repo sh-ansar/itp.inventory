@@ -258,16 +258,16 @@ export default {
         paddingBottom: this.label ? 0 : this.multiple ? '.3125rem' : '.4375rem',
       }
     },
-    valueProxyNew() {
-      let result = [];
-      if(this.valueProxy instanceof Array) {
+    valueProxyNew () {
+      let result = []
+      if (this.valueProxy instanceof Array) {
         this.valueProxy.forEach(e => {
-          result.push(e.name);
-        });
+          result.push(e.name)
+        })
       }
 
-      return result;
-    } ,
+      return result
+    },
     valueProxy: {
       get () {
         // let result = [];
@@ -275,7 +275,7 @@ export default {
         //   result.push(e.name);
         // });
         // return result;
-        return this.value;
+        return this.value
       },
       set (value) {
         this.$emit('input', value)

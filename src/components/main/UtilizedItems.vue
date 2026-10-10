@@ -190,7 +190,16 @@
            cell-template="fileCellTemplate"
           />
           <template #fileCellTemplate="data">
-            <a :href="uploadsPath+'/'+data.data.data.util_order_file_hashname" :title="data.data.value" target="_blank">{{data.data.value}}</a>
+            <a
+              v-if="data.data.value && !isMockMode"
+              :href="uploadsPath+'/'+data.data.data.util_order_file_hashname"
+              :title="data.data.value"
+              target="_blank"
+            >{{data.data.value}}</a>
+            <span
+              v-else-if="data.data.value"
+              :title="data.data.value"
+            >{{data.data.value}}</span>
           </template>
           <dx-column
            type="buttons"
@@ -255,6 +264,11 @@
           </div>
         </div>
       </va-modal>
+      <QrBatchModal
+        v-model="showQRBatchModal"
+        :items="qrBatchItems"
+        :prefix="qrPrefix"
+      />
     </div>
   </div>
 </template>
@@ -276,25 +290,25 @@ import {
   DxColumnChooser,
   DxFilterRow,
   DxButton,
-  DxSelection
+  DxSelection,
 } from 'devextreme-vue/data-grid'
 import QrcodeVue from 'qrcode.vue'
-import * as COMMON_CONSTS from '../../consts/common'
-import {QR_APPDX} from "../../consts/common";
-import {UPLOADS} from "../../consts/common";
+import QrBatchModal from '../QrBatchModal'
+import { BASE_URL, IS_MOCK_MODE, QR_APPDX, UPLOADS } from '../../consts/common'
 import {
   GET_ITEMS,
   GET_ITEMS_COUNT, GET_LOCATIONS,
   GET_QR_CODES, GET_RESPONSIBLE_PERSONS,
   LOAD_USER_PREFERENCES, SAVE_USER_PREFERENCES,
-  SET_UTILIZATION_STATUS, UPDATE_ITEM, UPLOAD_UTIL_ORDER_FILE
-} from "../../consts/urls";
-import { mapGetters } from 'vuex';
-import ClearPreferencesButton from "../ClearPreferencesButton";
+  SET_UTILIZATION_STATUS, UPDATE_ITEM, UPLOAD_UTIL_ORDER_FILE,
+} from '../../consts/urls'
+import { mapGetters } from 'vuex'
+import ClearPreferencesButton from '../ClearPreferencesButton'
 export default {
-  name: "UtilizedItems",
+  name: 'UtilizedItems',
   components: {
     ClearPreferencesButton,
+    QrBatchModal,
     DxDataGrid,
     DxColumn,
     DxGrouping,
@@ -311,213 +325,232 @@ export default {
     DxExport,
     DxButton,
     QrcodeVue,
-    DxSelection
+    DxSelection,
   },
-  data() {
+  data () {
     return {
       items: [],
       pageSizes: [5, 10, 20, 50, 100, 200, 500],
       showQRModal: false,
+      showQRBatchModal: false,
+      qrBatchItems: [],
+      qrPrefix: QR_APPDX,
       qrvalue: '',
       locations: [],
       persons: [],
       uploadsPath: UPLOADS,
+      isMockMode: IS_MOCK_MODE,
       chosenItems: [],
-    };
+    }
   },
   methods: {
     localizedUtilizedStatus () {
       return this.$t('app.status.utilized')
     },
-    saveUpdatedData(e) {
-      console.log(e);
-      this.$http.post(UPDATE_ITEM,{
+    saveUpdatedData (e) {
+      this.$http.post(UPDATE_ITEM, {
         item_id: e.data.id,
         fact_location_id: e.data.fact_location_id,
-        fact_responsible_person_iin: e.data.fact_responsible_person_iin
+        fact_responsible_person_iin: e.data.fact_responsible_person_iin,
       })
         .then(response => {
-          this.$swal(this.$t('app.common.success'), this.$t('app.common.savedSuccessfully'), 'success');
+          this.$swal(this.$t('app.common.success'), this.$t('app.common.savedSuccessfully'), 'success')
         }).finally(() => {
-          this.updateData();
-        });
+          this.updateData()
+        })
     },
-    uploadFile(e) {
-      let data = {};
-      data.item_id = e.row.data.id;
-      let fileInput = document.getElementById('fileUploader');
-      fileInput.click();
+    uploadFile (e) {
+      let data = {}
+      data.item_id = e.row.data.id
+      let fileInput = document.getElementById('fileUploader')
+      fileInput.click()
       fileInput.onchange = (e) => {
-        if(e.target.files.length !== 0) {
-          console.log(e.target.files);
+        if (e.target.files.length !== 0) {
           this.$swal({
             title: this.$t('app.common.areYouSure'),
             text: this.$t('app.common.attachFileConfirm') + ' ' + e.target.files[0].name,
             icon: 'info',
             showCancelButton: true,
-            cancelButtonText: this.$t('app.common.cancel')
+            cancelButtonText: this.$t('app.common.cancel'),
           }).then((result) => {
-            if(result.value){
-              data.order_file = e.target.files[0];
-              this.$http.post(UPLOAD_UTIL_ORDER_FILE,data,{
+            if (result.value) {
+              data.order_file = e.target.files[0]
+              this.$http.post(UPLOAD_UTIL_ORDER_FILE, data, {
                 headers: {
-                  'Content-Type': 'multipart/form-data'
-                }
+                  'Content-Type': 'multipart/form-data',
+                },
               })
                 .then((response) => {
-                  this.$swal(this.$t('app.common.success'), this.$t('app.common.savedSuccessfully'), 'success');
-                  this.updateData();
-                });
+                  this.$swal(this.$t('app.common.success'), this.$t('app.common.savedSuccessfully'), 'success')
+                  this.updateData()
+                })
             }
-            return false;
+            return false
           }).then((response) => {
-            if(response) {
-              this.$swal(this.$t('app.common.success'), this.$t('app.common.completedSuccessfully'), 'success');
-              this.updateData();
+            if (response) {
+              this.$swal(this.$t('app.common.success'), this.$t('app.common.completedSuccessfully'), 'success')
+              this.updateData()
             }
-          });
+          })
         }
-      };
+      }
     },
-    updateData() {
+    updateData () {
       this.$http.get(GET_LOCATIONS, {
         params: {
-          company_deleted: 0
-        }
+          company_deleted: 0,
+        },
       })
         .then(response => {
-          this.locations = response.data;
-        });
+          this.locations = response.data
+        })
       this.$http.get(GET_RESPONSIBLE_PERSONS)
         .then(response => {
-          this.persons = response.data;
-        });
+          this.persons = response.data
+        })
       let params = {
         is_utilized: 1,
-        company_deleted: 0
-      };
+        company_deleted: 0,
+      }
       if (this.getCompany) {
-        params.company_id = this.getCompany;
+        params.company_id = this.getCompany
       }
       this.$http.get(GET_ITEMS, {
-        params
+        params,
       })
         .then((response) => {
-          this.items = response.data;
+          this.items = response.data
         })
       this.$http.get(GET_ITEMS_COUNT, {
-        params
+        params,
       })
         .then((response) => {
-          this.count = response.data;
+          this.count = response.data
         })
     },
-    async customLoad() {
-      let state = await this.$http.get(LOAD_USER_PREFERENCES,{
+    async customLoad () {
+      let state = await this.$http.get(LOAD_USER_PREFERENCES, {
         params: {
-          table_id: 'main_items_util'
-        }
-      });
-      return JSON.parse(state.data);
+          table_id: 'main_items_util',
+        },
+      })
+      return JSON.parse(state.data)
     },
-    customSave(state) {
-      state.selectedRowKeys = [];
-      let stateStr = JSON.stringify(state);
-      this.$http.post(SAVE_USER_PREFERENCES,{
+    customSave (state) {
+      state.selectedRowKeys = []
+      let stateStr = JSON.stringify(state)
+      this.$http.post(SAVE_USER_PREFERENCES, {
         table_id: 'main_items_util',
-        json_string: stateStr
-      });
+        json_string: stateStr,
+      })
     },
-    isUtilized(e) {
-      if(e.row.data.is_utilized === '1') {
-        return true && this.canManager;
+    isUtilized (e) {
+      if (e.row.data.is_utilized === '1') {
+        return true && this.canManager
       }
-      return false;
+      return false
     },
-    isNotUtilized(e) {
-      if(e.row.data.is_utilized === '1') {
-        return false;
+    isNotUtilized (e) {
+      if (e.row.data.is_utilized === '1') {
+        return false
       }
-      return true && this.canManager;
+      return true && this.canManager
     },
-    utilize(e) {
-      if(e.row.data.is_utilized === '1') {
+    utilize (e) {
+      if (e.row.data.is_utilized === '1') {
         this.$swal({
           title: this.$t('app.common.areYouSure'),
           text: this.$t('app.common.utilizationConfirm'),
           icon: 'info',
           showCancelButton: true,
-          cancelButtonText: this.$t('app.common.cancel')
+          cancelButtonText: this.$t('app.common.cancel'),
         }).then((result) => {
-          if(result.value) {
+          if (result.value) {
             let data = {
               id: e.row.data.id,
-              is_utilized: '0'
-            };
-            return this.$http.post(SET_UTILIZATION_STATUS, data);
+              is_utilized: '0',
+            }
+            return this.$http.post(SET_UTILIZATION_STATUS, data)
           }
-          return false;
+          return false
         }).then((response) => {
-          if(response) {
-            this.$swal(this.$t('app.common.success'), this.$t('app.common.statusChangedSuccessfully'), 'success');
-            this.updateData();
+          if (response) {
+            this.$swal(this.$t('app.common.success'), this.$t('app.common.statusChangedSuccessfully'), 'success')
+            this.updateData()
           }
-        });
+        })
       } else {
         this.$swal({
           title: this.$t('app.common.areYouSure'),
           text: this.$t('app.common.utilizationConfirm'),
           icon: 'info',
           showCancelButton: true,
-          cancelButtonText: this.$t('app.common.cancel')
+          cancelButtonText: this.$t('app.common.cancel'),
         }).then((result) => {
-          if(result.value) {
+          if (result.value) {
             let data = {
               id: e.row.data.id,
-              is_utilized: '1'
-            };
-            return this.$http.post(SET_UTILIZATION_STATUS, data);
+              is_utilized: '1',
+            }
+            return this.$http.post(SET_UTILIZATION_STATUS, data)
           }
-          return false;
+          return false
         }).then((response) => {
-          if(response) {
-            this.$swal(this.$t('app.common.success'), this.$t('app.common.statusChangedSuccessfully'), 'success');
-            this.updateData();
+          if (response) {
+            this.$swal(this.$t('app.common.success'), this.$t('app.common.statusChangedSuccessfully'), 'success')
+            this.updateData()
           }
         })
       }
     },
-    showQR(e) {
+    showQR (e) {
       this.qrvalue = QR_APPDX + e.row.data.id
       this.showQRModal = true
     },
-    generateQRs() {
+    generateQRs () {
       this.chosenItems = []
-      let itemsObj = this.$refs.itemsGrid.instance.getSelectedRowsData()
+      const itemsObj = this.$refs.itemsGrid.instance.getSelectedRowsData()
+
+      if (!itemsObj.length) {
+        this.$swal(this.$t('app.common.error'), this.$t('app.common.selectAssetsWarning'), 'warning')
+        return
+      }
+
+      if (itemsObj.length > 100) {
+        this.$swal(this.$t('app.common.error'), this.$t('app.common.qrLimit'), 'warning')
+        return
+      }
+
+      if (IS_MOCK_MODE) {
+        this.qrBatchItems = itemsObj
+        this.showQRBatchModal = true
+        return
+      }
+
       itemsObj.forEach((element) => {
         this.chosenItems.push(element.id)
       })
-      window.open(COMMON_CONSTS.BASE_URL + GET_QR_CODES + this.generateItemsList(this.chosenItems),'_blank')
+      window.open(BASE_URL + GET_QR_CODES + this.generateItemsList(this.chosenItems), '_blank')
     },
-    generateItemsList(items){
+    generateItemsList (items) {
       let params = ''
       items.forEach((item) => {
         params += '&items[]=' + item
       })
       return params
-    }
+    },
   },
   computed: {
-    ...mapGetters(['canAdmin','canManager','getCompany'])
+    ...mapGetters(['canAdmin', 'canManager', 'getCompany']),
   },
   watch: {
-    getCompany() {
-      this.updateData();
-    }
+    getCompany () {
+      this.updateData()
+    },
   },
-  beforeMount() {
+  beforeMount () {
     this.updateData()
-  }
+  },
 }
 </script>
 

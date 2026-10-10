@@ -35,11 +35,11 @@
 </template>
 
 <script>
-import {AUTH_REQUEST} from "../../../consts/auth";
-import { OrbitSpinner } from 'epic-spinners';
+import { AUTH_REQUEST } from '../../../consts/auth'
+import { OrbitSpinner } from 'epic-spinners'
 export default {
   components: {
-    OrbitSpinner
+    OrbitSpinner,
   },
   name: 'login',
   data () {
@@ -59,22 +59,45 @@ export default {
   },
   methods: {
     onsubmit () {
-      this.loading = true;
       this.usernameErrors = this.username ? [] : [this.$t('auth.validation.emailRequired')]
       this.passwordErrors = this.password ? [] : [this.$t('auth.validation.passwordRequired')]
+
       if (!this.formReady) {
+        this.loading = false
         return
       }
-      const {username, password} = this
-      this.$store.dispatch(AUTH_REQUEST, {username, password}).then(() => {
-        this.loading = false;
-        this.$router.push({ name: 'dashboard' })
+
+      this.loading = true
+
+      const { username, password, keepLoggedIn } = this
+
+      this.$store.dispatch(AUTH_REQUEST, {
+        credentials: { username, password },
+        keepLoggedIn,
+      }).then(() => {
+        this.loading = false
+
+        const redirect = this.$route.query.redirect
+        this.$router.push(redirect || { name: 'dashboard' })
       }).catch(e => {
-        this.loading = false;
-        if(e.response.status == 401) {
-          this.$swal(this.$t('app.common.authErrorTitle'), this.$t('app.common.invalidCredentials'), 'error');
+        this.loading = false
+
+        const status = e && e.response && e.response.status
+
+        if (status === 401) {
+          this.$swal(
+            this.$t('app.common.authErrorTitle'),
+            this.$t('app.common.invalidCredentials'),
+            'error',
+          )
+        } else if (!status) {
+          this.$swal(
+            this.$t('app.common.authErrorTitle'),
+            this.$t('app.common.connectionError'),
+            'error',
+          )
         }
-      });
+      })
     },
   },
 }

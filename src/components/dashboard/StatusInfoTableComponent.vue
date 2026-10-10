@@ -253,10 +253,8 @@ import {
   DxSearchPanel,
   DxColumnChooser,
   DxFilterRow,
-  DxButton,
   DxSelection,
 } from 'devextreme-vue/data-grid'
-import QrcodeVue from 'qrcode.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -276,8 +274,6 @@ export default {
     DxColumnChooser,
     DxFilterRow,
     DxExport,
-    DxButton,
-    QrcodeVue,
     DxSelection,
     ClearPreferencesButton,
   },

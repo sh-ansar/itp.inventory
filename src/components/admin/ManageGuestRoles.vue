@@ -64,7 +64,7 @@
 </template>
 
 <script>
-  import {GET_GUEST_USERS, LOAD_USER_PREFERENCES, SAVE_USER_PREFERENCES, UPDATE_GUEST_ROLE} from "../../consts/urls";
+import { GET_GUEST_USERS, LOAD_USER_PREFERENCES, SAVE_USER_PREFERENCES, UPDATE_GUEST_ROLE } from '../../consts/urls'
 import {
   DxDataGrid,
   DxColumn,
@@ -75,12 +75,12 @@ import {
   DxPaging,
   DxSearchPanel,
   DxFilterRow,
-} from "devextreme-vue/data-grid";
-import { mapGetters } from 'vuex';
-  import ClearPreferencesButton from "../ClearPreferencesButton";
+} from 'devextreme-vue/data-grid'
+import { mapGetters } from 'vuex'
+import ClearPreferencesButton from '../ClearPreferencesButton'
 
 export default {
-  name: "ManageGuestRoles",
+  name: 'ManageGuestRoles',
   components: {
     ClearPreferencesButton,
     DxDataGrid,
@@ -93,58 +93,58 @@ export default {
     DxSearchPanel,
     DxFilterRow,
   },
-  data() {
+  data () {
     return {
       users: [],
-      pageSizes: [5, 10, 20]
-    };
+      pageSizes: [5, 10, 20],
+    }
   },
   computed: {
-    ...mapGetters(['canAdmin','canManager'])
+    ...mapGetters(['canAdmin', 'canManager']),
   },
   methods: {
-    async customLoad() {
-      let state = await this.$http.get(LOAD_USER_PREFERENCES,{
+    async customLoad () {
+      let state = await this.$http.get(LOAD_USER_PREFERENCES, {
         params: {
-          table_id: 'manage_guest_roles'
-        }
-      });
-      return JSON.parse(state.data);
+          table_id: 'manage_guest_roles',
+        },
+      })
+      return JSON.parse(state.data)
     },
-    customSave(state) {
-      let stateStr = JSON.stringify(state);
-      this.$http.post(SAVE_USER_PREFERENCES,{
+    customSave (state) {
+      let stateStr = JSON.stringify(state)
+      this.$http.post(SAVE_USER_PREFERENCES, {
         table_id: 'manage_guest_roles',
-        json_string: stateStr
-      });
+        json_string: stateStr,
+      })
     },
-    getData() {
+    getData () {
       this.$http.get(GET_GUEST_USERS)
         .then((response) => {
-          this.users = response.data;
-        });
+          this.users = response.data
+        })
     },
-    updateData(e) {
+    updateData (e) {
       let updInfo = {
         id: e.data.id,
-        is_guest: e.data.is_guest
-      };
+        is_guest: e.data.is_guest,
+      }
 
       this.$http.post(UPDATE_GUEST_ROLE, updInfo)
         .then((response) => {
-          this.$swal(this.$t('app.common.success'), this.$t('app.common.savedSuccessfully'), 'success');
+          this.$swal(this.$t('app.common.success'), this.$t('app.common.savedSuccessfully'), 'success')
         })
         .catch((response) => {
-          this.$swal(this.$t('app.common.error'), this.$t('app.pages.roles.dataError'), 'error');
+          this.$swal(this.$t('app.common.error'), this.$t('app.pages.roles.dataError'), 'error')
         })
         .finally(() => {
-          this.getData();
-        });
-    }
+          this.getData()
+        })
+    },
   },
-  beforeMount() {
-    this.getData();
-  }
+  beforeMount () {
+    this.getData()
+  },
 }
 </script>
 
