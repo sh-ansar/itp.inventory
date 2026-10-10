@@ -1,4 +1,6 @@
 import {
+  LOGIN,
+  LOGOUT,
   USER_INFO,
   GET_COMPANIES,
   GET_COMPANIES_WITH_SYNC_INFO,
@@ -1211,6 +1213,14 @@ export function getMockApiData (config) {
 
   if (url === GET_START_MANUAL_SYNC) {
     return clone(startDemoSync(config))
+  }
+
+  if (url === LOGIN) {
+    return 'demo-token'
+  }
+
+  if (url === LOGOUT) {
+    return { success: true }
   }
 
   if (method !== 'get') {
