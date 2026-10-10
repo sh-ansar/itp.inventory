@@ -440,6 +440,7 @@ export default {
     DxHeaderFilter,
     DxScrolling,
     ClearPreferencesButton,
+    QrBatchModal,
     DxGroupPanel,
     DxEditing,
     DxLookup,
