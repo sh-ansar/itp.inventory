@@ -70,7 +70,6 @@ axios.interceptors.request.use(function (config) {
   return Promise.reject(error)
 })
 
-
 const publicRoutes = ['login', 'signup', 'recover-password']
 
 async function ensureUserInfo () {

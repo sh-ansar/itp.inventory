@@ -109,13 +109,13 @@
 </template>
 
 <script>
-  import {
-    ADD_COMPANY,
-    GET_SYNC_SETTINGS,
-    LOAD_USER_PREFERENCES,
-    SAVE_SYNC_SETTINGS,
-    SAVE_USER_PREFERENCES
-  } from "../../consts/urls";
+import {
+  ADD_COMPANY,
+  GET_SYNC_SETTINGS,
+  LOAD_USER_PREFERENCES,
+  SAVE_SYNC_SETTINGS,
+  SAVE_USER_PREFERENCES,
+} from '../../consts/urls'
 import {
   DxDataGrid,
   DxColumn,
@@ -124,10 +124,10 @@ import {
   DxRequiredRule,
   DxStringLengthRule,
   DxRangeRule,
-  DxNumericRule
+  DxNumericRule,
 } from 'devextreme-vue/data-grid'
 import { mapGetters } from 'vuex'
-  import ClearPreferencesButton from "../ClearPreferencesButton";
+import ClearPreferencesButton from '../ClearPreferencesButton'
 export default {
   name: 'SyncSettings',
   components: {
@@ -139,68 +139,68 @@ export default {
     DxRequiredRule,
     DxStringLengthRule,
     DxRangeRule,
-    DxNumericRule
+    DxNumericRule,
   },
-  data() {
+  data () {
     return {
-      companies: []
+      companies: [],
     }
   },
   computed: {
-    ...mapGetters(['canAdmin','canManager'])
+    ...mapGetters(['canAdmin', 'canManager']),
   },
   methods: {
-    async customLoad() {
-      let state = await this.$http.get(LOAD_USER_PREFERENCES,{
+    async customLoad () {
+      let state = await this.$http.get(LOAD_USER_PREFERENCES, {
         params: {
-          table_id: 'sync_settings'
-        }
-      });
-      return JSON.parse(state.data);
+          table_id: 'sync_settings',
+        },
+      })
+      return JSON.parse(state.data)
     },
-    customSave(state) {
-      let stateStr = JSON.stringify(state);
-      this.$http.post(SAVE_USER_PREFERENCES,{
+    customSave (state) {
+      let stateStr = JSON.stringify(state)
+      this.$http.post(SAVE_USER_PREFERENCES, {
         table_id: 'sync_settings',
-        json_string: stateStr
-      });
+        json_string: stateStr,
+      })
     },
-    getCompanies(){
+    getCompanies () {
       this.$http.get(GET_SYNC_SETTINGS)
         .then((resp) => {
           this.companies = resp.data
         })
     },
-    rowUpdated(e){
+    rowUpdated (e) {
       let params = {}
-      for(let prop in e.data) {
-        if(e.data[prop] !== undefined && e.data[prop] !== null){
+      for (let prop in e.data) {
+        if (e.data[prop] !== undefined && e.data[prop] !== null) {
           params[prop] = e.data[prop]
         }
       }
-      this.$http.post(SAVE_SYNC_SETTINGS,params)
+      this.$http.post(SAVE_SYNC_SETTINGS, params)
         .then((response) => {
-          this.$swal(this.$t('app.common.success'), this.$t('app.common.savedSuccessfully'), 'success');
-          this.getCompanies();
+          this.$swal(this.$t('app.common.success'), this.$t('app.common.savedSuccessfully'), 'success')
+          this.getCompanies()
         })
     },
-    rowInserted(e){
+    rowInserted (e) {
       let params = {}
-      for(let prop in e.data) {
-        if(e.data[prop] !== undefined && e.data[prop] !== null){
+      for (let prop in e.data) {
+        if (e.data[prop] !== undefined && e.data[prop] !== null) {
           params[prop] = e.data[prop]
         }
       }
-      this.$http.post(ADD_COMPANY,params)
+      this.$http.post(ADD_COMPANY, params)
         .then((response) => {
-          this.$swal(this.$t('app.common.success'), this.$t('app.common.addedSuccessfully'), 'success');
-          this.getCompanies();
+          this.$swal(this.$t('app.common.success'), this.$t('app.common.addedSuccessfully'), 'success')
+          this.getCompanies()
         })
-    }
+    },
   },
-  mounted() {
+  mounted () {
     this.getCompanies()
-  }
+  },
 }
 </script>
 

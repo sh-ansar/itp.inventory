@@ -13,33 +13,32 @@ const getDefaultOptions = () => {
   //     },
   //   }
   // } else {
-    // return {
-    //   themes: {
-    //     primary: '#40e583',
-    //     secondary: '#002c85',
-    //     success: '#40e583',
-    //     info: '#2c82e0',
-    //     danger: '#e34b4a',
-    //     warning: '#ffc200',
-    //     gray: '#babfc2',
-    //     dark: '#34495e',
-    //   },
-    // }
-    return {
-      themes: {
-        primary: '#007BFF',
-        secondary: '#111D2D',
-        success: '#28A745',
-        info: '#17A2B8',
-        danger: '#DC3545',
-        warning: '#FFC107',
-        gray: '#C3CFD8',
-        dark: '#343A40',
-      },
-    }
-  //}
+  // return {
+  //   themes: {
+  //     primary: '#40e583',
+  //     secondary: '#002c85',
+  //     success: '#40e583',
+  //     info: '#2c82e0',
+  //     danger: '#e34b4a',
+  //     warning: '#ffc200',
+  //     gray: '#babfc2',
+  //     dark: '#34495e',
+  //   },
+  // }
+  return {
+    themes: {
+      primary: '#007BFF',
+      secondary: '#111D2D',
+      success: '#28A745',
+      info: '#17A2B8',
+      danger: '#DC3545',
+      warning: '#FFC107',
+      gray: '#C3CFD8',
+      dark: '#343A40',
+    },
+  }
+  // }
 }
-
 
 export const ColorThemePlugin = {
   install (Vue, options) {

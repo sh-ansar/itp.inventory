@@ -91,7 +91,7 @@
 
 <script>
 import VaColorPresentation
-  from 'vuestic-ui/src/components/vuestic-components/va-color-presentation/VaColorPresentation'
+from 'vuestic-ui/src/components/vuestic-components/va-color-presentation/VaColorPresentation'
 import {
   themeColors,
   extraColors,

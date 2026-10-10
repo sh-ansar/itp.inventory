@@ -1,11 +1,10 @@
 import * as AUTH_CONSTS from '../../consts/auth'
-import {LOGIN, LOGOUT, USER_INFO} from '../../consts/urls'
+import { LOGIN, USER_INFO } from '../../consts/urls'
 import { axios } from '../../app/main'
-import {AUTH_USER_INFO} from "../../consts/auth";
 const state = {
   token: localStorage.getItem('user-token') || sessionStorage.getItem('user-token') || '',
   status: '',
-  userInfo: null
+  userInfo: null,
 }
 
 const mutations = {
@@ -25,11 +24,11 @@ const mutations = {
   },
   [AUTH_CONSTS.AUTH_SET_USER_INFO]: (state, userInfo) => {
     state.userInfo = userInfo
-  }
+  },
 }
 
 const actions = {
-  [AUTH_CONSTS.AUTH_USER_INFO]: ({commit, dispatch}) => {
+  [AUTH_CONSTS.AUTH_USER_INFO]: ({ commit, dispatch }) => {
     return new Promise((resolve, reject) => {
       axios.get(USER_INFO)
         .then(resp => {
@@ -44,7 +43,7 @@ const actions = {
         })
     })
   },
-  [AUTH_CONSTS.AUTH_REQUEST]: ({commit, dispatch}, payload) => {
+  [AUTH_CONSTS.AUTH_REQUEST]: ({ commit, dispatch }, payload) => {
     return new Promise((resolve, reject) => {
       commit(AUTH_CONSTS.AUTH_REQUEST)
 
@@ -81,7 +80,7 @@ const actions = {
         })
     })
   },
-  [AUTH_CONSTS.AUTH_LOGOUT]: ({commit, dispatch}) => {
+  [AUTH_CONSTS.AUTH_LOGOUT]: ({ commit, dispatch }) => {
     return new Promise((resolve, reject) => {
       commit(AUTH_CONSTS.AUTH_LOGOUT)
       localStorage.removeItem('user-token')
@@ -89,7 +88,7 @@ const actions = {
       delete axios.defaults.headers.common['Authorization']
       resolve()
     })
-  }
+  },
 }
 
 export default {

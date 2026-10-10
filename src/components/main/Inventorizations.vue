@@ -470,20 +470,20 @@ import {
   DxColumnChooser,
   DxButton,
   DxFilterRow,
-  DxSelection
+  DxSelection,
 } from 'devextreme-vue/data-grid'
 import { mapGetters } from 'vuex'
 import 'devextreme/data/odata/store'
-import VaMultipleSelect from "../ui/select/VaMultipleSelect";
+import VaMultipleSelect from '../ui/select/VaMultipleSelect'
 import {
   CREATE_INVENTORY_CHECK, FORM_REPORT, GET_COMPANIES,
   GET_INVENTORIZATIONS, GET_INVENTORY_CHECK_ITEMS,
   GET_ITEMS,
   GET_LOCATIONS_FOR_FEW_COMPANIES,
-  GET_RESPONSIBLE_PERSONS, LOAD_USER_PREFERENCES, SAVE_USER_PREFERENCES, SET_INV_COMPLETE_STATUS, UPLOAD_REPORT_FILE
-} from "../../consts/urls";
-import {UPLOADS} from "../../consts/common";
-import ClearPreferencesButton from "../ClearPreferencesButton";
+  GET_RESPONSIBLE_PERSONS, LOAD_USER_PREFERENCES, SAVE_USER_PREFERENCES, SET_INV_COMPLETE_STATUS, UPLOAD_REPORT_FILE,
+} from '../../consts/urls'
+import { UPLOADS } from '../../consts/common'
+import ClearPreferencesButton from '../ClearPreferencesButton'
 export default {
   name: 'Inventorizations',
   components: {
@@ -500,9 +500,9 @@ export default {
     DxSearchPanel,
     DxColumnChooser,
     DxFilterRow,
-    DxSelection
+    DxSelection,
   },
-  data (){
+  data () {
     return {
       invTypeModel: '',
       showItemsModal: false,
@@ -516,7 +516,7 @@ export default {
       itemsList: [],
       companies: [],
       company: [],
-      chosenItems: []
+      chosenItems: [],
     }
   },
   methods: {
@@ -537,211 +537,211 @@ export default {
       }
       return this.$t('app.status.onBalance')
     },
-    uploadFile(e) {
-      let data = {};
-      data.inv_check_id = e.row.data.id;
-      let fileInput = document.getElementById('fileUploader');
-      fileInput.click();
+    uploadFile (e) {
+      let data = {}
+      data.inv_check_id = e.row.data.id
+      let fileInput = document.getElementById('fileUploader')
+      fileInput.click()
       fileInput.onchange = (e) => {
-        if(e.target.files.length !== 0) {
+        if (e.target.files.length !== 0) {
           this.$swal({
             title: this.$t('app.common.areYouSure'),
             text: this.$t('app.common.attachFileConfirm') + ' ' + e.target.files[0].name,
             icon: 'info',
             showCancelButton: true,
-            cancelButtonText: this.$t('app.common.cancel')
+            cancelButtonText: this.$t('app.common.cancel'),
           }).then((result) => {
-            if(result.value){
-              data.report_file = e.target.files[0];
-              this.$http.post(UPLOAD_REPORT_FILE,data,{
+            if (result.value) {
+              data.report_file = e.target.files[0]
+              this.$http.post(UPLOAD_REPORT_FILE, data, {
                 headers: {
-                  'Content-Type': 'multipart/form-data'
-                }
+                  'Content-Type': 'multipart/form-data',
+                },
               })
                 .then((response) => {
-                  this.$swal(this.$t('app.common.success'), this.$t('app.common.savedSuccessfully'), 'success');
-                  this.updateData();
-                });
+                  this.$swal(this.$t('app.common.success'), this.$t('app.common.savedSuccessfully'), 'success')
+                  this.updateData()
+                })
             }
-            return false;
+            return false
           }).then((response) => {
-            if(response) {
-              this.$swal(this.$t('app.common.success'), this.$t('app.common.completedSuccessfully'), 'success');
-              this.updateData();
+            if (response) {
+              this.$swal(this.$t('app.common.success'), this.$t('app.common.completedSuccessfully'), 'success')
+              this.updateData()
             }
-          });
+          })
         }
-      };
-    },
-    async customLoad(table_id) {
-      let state = await this.$http.get(LOAD_USER_PREFERENCES,{
-        params: {
-          table_id: tableId
-        }
-      });
-      return JSON.parse(state.data);
-    },
-    customSave(state, table_id) {
-      if(state.selectedRowKeys !== undefined) {
-        state.selectedRowKeys = [];
       }
-      let stateStr = JSON.stringify(state);
-      this.$http.post(SAVE_USER_PREFERENCES,{
+    },
+    async customLoad (tableId) {
+      let state = await this.$http.get(LOAD_USER_PREFERENCES, {
+        params: {
+          table_id: tableId,
+        },
+      })
+      return JSON.parse(state.data)
+    },
+    customSave (state, tableId) {
+      if (state.selectedRowKeys !== undefined) {
+        state.selectedRowKeys = []
+      }
+      let stateStr = JSON.stringify(state)
+      this.$http.post(SAVE_USER_PREFERENCES, {
         table_id: tableId,
-        json_string: stateStr
-      });
+        json_string: stateStr,
+      })
     },
-    async customLoadInv() {
-      return this.customLoad('invs');
+    async customLoadInv () {
+      return this.customLoad('invs')
     },
-    customSaveInv(state) {
-      this.customSave(state, 'invs');
+    customSaveInv (state) {
+      this.customSave(state, 'invs')
     },
-    async customLoadInvList() {
-      return this.customLoad('inv_list');
+    async customLoadInvList () {
+      return this.customLoad('inv_list')
     },
-    customSaveInvList(state) {
-      this.customSave(state, 'inv_list');
+    customSaveInvList (state) {
+      this.customSave(state, 'inv_list')
     },
-    async customLoadSelectionList() {
-      return this.customLoad('inv_selection_list');
+    async customLoadSelectionList () {
+      return this.customLoad('inv_selection_list')
     },
-    customSaveSelectionList(state) {
-      this.customSave(state, 'inv_selection_list');
+    customSaveSelectionList (state) {
+      this.customSave(state, 'inv_selection_list')
     },
-    formReport(e) {
-      let params = {};
-      params.inv_check_id = e.row.data.id;
-      this.$http.get(FORM_REPORT,{params})
+    formReport (e) {
+      let params = {}
+      params.inv_check_id = e.row.data.id
+      this.$http.get(FORM_REPORT, { params })
         .then((response) => {
-          window.open(UPLOADS + '/' + response.data,'_blank');
-        });
+          window.open(UPLOADS + '/' + response.data, '_blank')
+        })
     },
-    updateData() {
+    updateData () {
       this.$http.get(GET_INVENTORIZATIONS)
         .then((response) => {
-          this.inventorizations = response.data;
-        });
+          this.inventorizations = response.data
+        })
       this.$http.get(GET_COMPANIES, {
         params: {
-          is_deleted: 0
-        }
+          is_deleted: 0,
+        },
       })
         .then((response) => {
-          this.companies = response.data;
-        });
+          this.companies = response.data
+        })
       // this.$http.get(GET_ITEMS)
       //   .then((response) => {
       //     this.items = response.data;
       //   });
     },
-    changeCompleteStatus(e) {
-      if(e.row.data.completed) {
+    changeCompleteStatus (e) {
+      if (e.row.data.completed) {
         this.$swal({
           title: this.$t('app.common.areYouSure'),
           text: this.$t('app.common.uncompleteInventoryConfirm'),
           icon: 'info',
           showCancelButton: true,
-          cancelButtonText: this.$t('app.common.cancel')
+          cancelButtonText: this.$t('app.common.cancel'),
         }).then((result) => {
-          if(result.value){
+          if (result.value) {
             let data = {
               id: e.row.data.id,
-              is_completed: '0'
-            };
-            return this.$http.post(SET_INV_COMPLETE_STATUS,data);
+              is_completed: '0',
+            }
+            return this.$http.post(SET_INV_COMPLETE_STATUS, data)
           }
-          return false;
+          return false
         }).then((response) => {
-          if(response) {
-            this.$swal(this.$t('app.common.success'), this.$t('app.common.completedSuccessfully'), 'success');
-            this.updateData();
+          if (response) {
+            this.$swal(this.$t('app.common.success'), this.$t('app.common.completedSuccessfully'), 'success')
+            this.updateData()
           }
-        });
+        })
       } else {
         this.$swal({
           title: this.$t('app.common.areYouSure'),
           text: this.$t('app.common.completeInventoryConfirm'),
           icon: 'info',
           showCancelButton: true,
-          cancelButtonText: this.$t('app.common.cancel')
+          cancelButtonText: this.$t('app.common.cancel'),
         }).then((result) => {
-          if(result.value){
+          if (result.value) {
             let data = {
               id: e.row.data.id,
-              is_completed: '1'
-            };
-            return this.$http.post(SET_INV_COMPLETE_STATUS,data);
+              is_completed: '1',
+            }
+            return this.$http.post(SET_INV_COMPLETE_STATUS, data)
           }
-          return false;
+          return false
         }).then((response) => {
-          if(response) {
-            this.$swal(this.$t('app.common.success'), this.$t('app.common.completedSuccessfully'), 'success');
-            this.updateData();
+          if (response) {
+            this.$swal(this.$t('app.common.success'), this.$t('app.common.completedSuccessfully'), 'success')
+            this.updateData()
           }
-        });
+        })
       }
     },
-    isCompleted(e) {
-      if(e.row.data.completed) {
-        return true && this.canManager;
+    isCompleted (e) {
+      if (e.row.data.completed) {
+        return true && this.canManager
       }
-      return false;
+      return false
     },
-    isNotCompleted(e) {
-      if(e.row.data.completed) {
-        return false;
+    isNotCompleted (e) {
+      if (e.row.data.completed) {
+        return false
       }
-      return true && this.canManager;
+      return true && this.canManager
     },
-    showInventoryCheckItems(e){
-      let checkId = e.row.data.id;
-      this.chosenItems = [];
-      this.$http.get(GET_INVENTORY_CHECK_ITEMS,{
+    showInventoryCheckItems (e) {
+      let checkId = e.row.data.id
+      this.chosenItems = []
+      this.$http.get(GET_INVENTORY_CHECK_ITEMS, {
         params: {
-          inv_check_id: checkId
-        }
+          inv_check_id: checkId,
+        },
       })
         .then((response) => {
           this.itemsList = response.data
           this.showItemsListModal = true
         })
     },
-    confirmItems(){
+    confirmItems () {
       let itemsObj = this.$refs.itemsGrid.instance.getSelectedRowsData()
       itemsObj.forEach((element) => {
         this.chosenItems.push(element.id)
       })
     },
-    createInventorization() {
-      if(this.chosenItems.length > 0){
+    createInventorization () {
+      if (this.chosenItems.length > 0) {
         this.$swal({
           title: this.$t('app.common.areYouSure'),
           text: this.$t('app.common.createInventoryConfirm'),
           icon: 'info',
           showCancelButton: true,
-          cancelButtonText: this.$t('app.common.cancel')
+          cancelButtonText: this.$t('app.common.cancel'),
         })
           .then((result) => {
-            if(result.value){
-              let params = {};
-              params.items = this.chosenItems;
-              if(this.company.length > 0) {
-                params.companies = [];
+            if (result.value) {
+              let params = {}
+              params.items = this.chosenItems
+              if (this.company.length > 0) {
+                params.companies = []
                 this.company.forEach(e => {
-                  params.companies.push(e.id);
-                });
+                  params.companies.push(e.id)
+                })
               }
-              if(this.invTypeModel) {
-                params.inv_type_model = this.invTypeModel.id;
+              if (this.invTypeModel) {
+                params.inv_type_model = this.invTypeModel.id
               }
-              if(this.currentFilterItem.length > 0) {
-                params.current_filter_item = [];
+              if (this.currentFilterItem.length > 0) {
+                params.current_filter_item = []
                 this.currentFilterItem.forEach(e => {
-                  params.current_filter_item.push(e.id);
-                });
+                  params.current_filter_item.push(e.id)
+                })
               }
-              return this.$http.post(CREATE_INVENTORY_CHECK, params);
+              return this.$http.post(CREATE_INVENTORY_CHECK, params)
               // return this.$http.post(CREATE_INVENTORY_CHECK, {
               //   items: this.chosenItems,
               //   company_id: this.company.id,
@@ -749,54 +749,54 @@ export default {
               //   current_filter_item: this.currentFilterItem.id
               // })
             }
-            return false;
+            return false
           })
           .then((response) => {
-            if(response) {
-              this.$swal(this.$t('app.common.success'), this.$t('app.common.inventoryCreatedSuccessfully'), 'success');
-              this.updateData();
+            if (response) {
+              this.$swal(this.$t('app.common.success'), this.$t('app.common.inventoryCreatedSuccessfully'), 'success')
+              this.updateData()
             }
           }).finally(() => {
-              this.chosenItems = [];
-          });
-      }else{
-        this.$swal(this.$t('app.common.error'), this.$t('app.common.selectAssetsWarning'), 'warning');
-        this.chosenItems = [];
+            this.chosenItems = []
+          })
+      } else {
+        this.$swal(this.$t('app.common.error'), this.$t('app.common.selectAssetsWarning'), 'warning')
+        this.chosenItems = []
       }
     },
-    updateItems() {
-      if(this.company.length > 0) {
-        let params = {};
-        params.companies = [];
-        params.is_utilized = 0;
+    updateItems () {
+      if (this.company.length > 0) {
+        let params = {}
+        params.companies = []
+        params.is_utilized = 0
         this.company.forEach(e => {
-          params.companies.push(e.id);
-        });
-        if(this.invTypeModel) {
-          if(this.invTypeModel.id === 1){
-            params.persons = [];
+          params.companies.push(e.id)
+        })
+        if (this.invTypeModel) {
+          if (this.invTypeModel.id === 1) {
+            params.persons = []
             this.currentFilterItem.forEach(e => {
-              params.persons.push(e.id);
-            });
-          } else if (this.invTypeModel.id === 2){
-            params.locations = [];
+              params.persons.push(e.id)
+            })
+          } else if (this.invTypeModel.id === 2) {
+            params.locations = []
             this.currentFilterItem.forEach(e => {
-              params.locations.push(e.id);
-            });
+              params.locations.push(e.id)
+            })
           }
         }
-        this.$http.get(GET_ITEMS,{
-          params: params
+        this.$http.get(GET_ITEMS, {
+          params: params,
         })
           .then((response) => {
             this.items = response.data
           })
       }
-    }
+    },
   },
   computed: {
     ...mapGetters([
-      'canAdmin', 'canManager'
+      'canAdmin', 'canManager',
     ]),
     invTypeOptions () {
       return [
@@ -806,46 +806,46 @@ export default {
     },
   },
   watch: {
-    company() {
-      this.invTypeModel = '';
-      this.items = [];
+    company () {
+      this.invTypeModel = ''
+      this.items = []
     },
-    invTypeModel(){
-      this.filterItems = [];
-      this.items = [];
-      this.currentFilterItem = [];
-      if(!this.invTypeModel){
-        return false;
+    invTypeModel () {
+      this.filterItems = []
+      this.items = []
+      this.currentFilterItem = []
+      if (!this.invTypeModel) {
+        return false
       }
-      if(this.invTypeModel.id === 1){
+      if (this.invTypeModel.id === 1) {
         this.$http.get(GET_RESPONSIBLE_PERSONS)
           .then((response) => {
-            this.filterItems = response.data;
-          });
-      }else if(this.invTypeModel.id === 2){
-        let params = {};
-        if(this.company.length > 0) {
-          let companies = [];
+            this.filterItems = response.data
+          })
+      } else if (this.invTypeModel.id === 2) {
+        let params = {}
+        if (this.company.length > 0) {
+          let companies = []
           this.company.forEach(e => {
-            companies.push(e.id);
-          });
-          params.companies = companies;
+            companies.push(e.id)
+          })
+          params.companies = companies
         }
         this.$http.get(GET_LOCATIONS_FOR_FEW_COMPANIES, {
-          params
+          params,
         })
           .then((response) => {
-            this.filterItems = response.data;
-          });
-      }/*else{
+            this.filterItems = response.data
+          })
+      }/* else{
         this.$http.get(GET_COMPANIES)
           .then((response) => {
             this.filterItems = response.data;
           });
-      }*/
+      } */
     },
-    currentFilterItem(){
-      this.items = [];
+    currentFilterItem () {
+      this.items = []
       // if((this.currentFilterItem.length > 0) && this.invTypeModel && (this.company.length > 0)){
       //   let params = {};
       //   params.company_id = this.company.id;
@@ -866,11 +866,11 @@ export default {
       // } else {
       //   this.updateData();
       // }
-    }
+    },
   },
-  beforeMount() {
+  beforeMount () {
     this.updateData()
-  }
+  },
 }
 </script>
 

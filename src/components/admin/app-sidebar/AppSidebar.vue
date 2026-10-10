@@ -52,23 +52,23 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'canAdmin', 'canManager'
+      'canAdmin', 'canManager',
     ]),
-    checkPrivilege() {
+    checkPrivilege () {
       return (item) => {
-        if(item.meta && item.meta.roles) {
-          let val = false;
+        if (item.meta && item.meta.roles) {
+          let val = false
           item.meta.roles.forEach(el => {
-            if(this[el]) {
-              val = true;
+            if (this[el]) {
+              val = true
             }
-          });
-          return val;
+          })
+          return val
         } else {
-          return true;
+          return true
         }
       }
-    }
+    },
   },
   methods: {
     visibleChildren (item) {

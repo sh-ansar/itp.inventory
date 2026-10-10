@@ -35,11 +35,11 @@
 </template>
 
 <script>
-import {AUTH_REQUEST} from "../../../consts/auth";
-import { OrbitSpinner } from 'epic-spinners';
+import { AUTH_REQUEST } from '../../../consts/auth'
+import { OrbitSpinner } from 'epic-spinners'
 export default {
   components: {
-    OrbitSpinner
+    OrbitSpinner,
   },
   name: 'login',
   data () {

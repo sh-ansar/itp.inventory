@@ -6,26 +6,26 @@ const authStatus = state => state.auth.status
 const userInfo = state => state.auth.userInfo
 const getCompanies = state => state.app.companies
 const getCompany = state => {
-  if(state.app.company === '') {
-    return null;
+  if (state.app.company === '') {
+    return null
   } else {
-    return state.app.company.id;
+    return state.app.company.id
   }
 }
 
 const canAdmin = state => {
-  if(state.auth.userInfo && state.auth.userInfo.roles) {
-    return state.auth.userInfo.roles.uosAdmin;
+  if (state.auth.userInfo && state.auth.userInfo.roles) {
+    return state.auth.userInfo.roles.uosAdmin
   } else {
-    return false;
+    return false
   }
 }
 
 const canManager = state => {
-  if(state.auth.userInfo && state.auth.userInfo.roles) {
-    return state.auth.userInfo.roles.uosManager;
+  if (state.auth.userInfo && state.auth.userInfo.roles) {
+    return state.auth.userInfo.roles.uosManager
   } else {
-    return false;
+    return false
   }
 }
 
@@ -39,5 +39,5 @@ export {
   canAdmin,
   canManager,
   authStatus,
-  userInfo
+  userInfo,
 }

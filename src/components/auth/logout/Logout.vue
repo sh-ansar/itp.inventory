@@ -3,16 +3,16 @@
 </template>
 
 <script>
-import {AUTH_LOGOUT} from "../../../consts/auth";
+import { AUTH_LOGOUT } from '../../../consts/auth'
 
 export default {
   name: 'Logout',
-  beforeCreate() {
+  beforeCreate () {
     this.$store.dispatch(AUTH_LOGOUT)
       .then(() => {
         this.$router.push({ name: 'login' })
       })
-  }
+  },
 }
 </script>
 

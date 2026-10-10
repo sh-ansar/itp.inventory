@@ -80,7 +80,7 @@ export default {
     }
   },
   methods: {
-    applyColors(){
+    applyColors () {
       localStorage.setItem('app-colors', JSON.stringify({
         primary: this.$themes.primary,
         secondary: this.$themes.secondary,
@@ -91,8 +91,8 @@ export default {
         gray: this.$themes.gray,
         dark: this.$themes.dark,
       }))
-    }
-  }
+    },
+  },
 }
 </script>
 
