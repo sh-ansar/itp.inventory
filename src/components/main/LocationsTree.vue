@@ -58,7 +58,7 @@
 
 <script>
 import DxDropDownBox from 'devextreme-vue/drop-down-box'
-import { DxTreeList, DxColumn, DxEditing, DxStateStoring, DxPaging, DxPager, DxScrolling, DxHeaderFilter, DxFilterRow, DxSelection } from 'devextreme-vue/tree-list'
+import { DxTreeList, DxColumn, DxPaging, DxScrolling, DxHeaderFilter, DxFilterRow, DxSelection } from 'devextreme-vue/tree-list'
 const dropDownBoxRefName = 'dropDownBoxRef'
 
 export default {
@@ -67,11 +67,8 @@ export default {
     DxDropDownBox,
     DxTreeList,
     DxPaging,
-    DxPager,
     DxColumn,
-    DxStateStoring,
     DxScrolling,
-    DxEditing,
     DxHeaderFilter,
     DxFilterRow,
     DxSelection,
