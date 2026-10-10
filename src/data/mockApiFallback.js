@@ -426,7 +426,10 @@ const extraItems = Array.from({ length: 1411 }, (_, index) => {
   }
 })
 
-const items = baseItems.concat(extraItems)
+const items = baseItems.concat(extraItems).map(item => ({
+  ...item,
+  is_utilized: String(item.status_id) === '3' ? '1' : '0',
+}))
 
 const inventories = [
   {
