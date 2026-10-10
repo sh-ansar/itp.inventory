@@ -495,7 +495,7 @@ export default {
       itemsObj.forEach((element) => {
         this.chosenItems.push(element.id)
       })
-      window.open(COMMON_CONSTS.BASE_URL + GET_QR_CODES + this.generateItemsList(this.chosenItems),'_blank')
+      window.open(BASE_URL + GET_QR_CODES + this.generateItemsList(this.chosenItems),'_blank')
     },
     generateItemsList(items){
       let params = ''
