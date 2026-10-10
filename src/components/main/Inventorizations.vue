@@ -482,7 +482,7 @@ import {
   GET_LOCATIONS_FOR_FEW_COMPANIES,
   GET_RESPONSIBLE_PERSONS, LOAD_USER_PREFERENCES, SAVE_USER_PREFERENCES, SET_INV_COMPLETE_STATUS, UPLOAD_REPORT_FILE,
 } from '../../consts/urls'
-import { UPLOADS } from '../../consts/common'
+import { IS_MOCK_MODE, UPLOADS } from '../../consts/common'
 import ClearPreferencesButton from '../ClearPreferencesButton'
 export default {
   name: 'Inventorizations',
@@ -610,12 +610,42 @@ export default {
       this.customSave(state, 'inv_selection_list')
     },
     formReport (e) {
+      if (IS_MOCK_MODE) {
+        this.downloadMockInventoryReport(e.row.data)
+        return
+      }
+
       let params = {}
       params.inv_check_id = e.row.data.id
       this.$http.get(FORM_REPORT, { params })
         .then((response) => {
           window.open(UPLOADS + '/' + response.data, '_blank')
         })
+    },
+    downloadMockInventoryReport (inventory) {
+      const rows = [
+        [this.$t('app.common.number'), inventory.id],
+        [this.$t('app.pages.inventories.initiatedAt'), inventory.date],
+        [this.$t('app.pages.inventories.initiator'), inventory.author],
+        [this.$t('app.pages.inventories.status'), this.localizedInventoryStatus(inventory)],
+        [this.$t('app.pages.inventories.company'), inventory.companies],
+        [this.$t('app.pages.inventories.responsible'), inventory.persons],
+        [this.$t('app.pages.inventories.location'), inventory.locations],
+        [this.$t('app.pages.inventories.completedAt'), inventory.date_completed || ''],
+      ]
+
+      const csv = '\uFEFF' + rows
+        .map(row => row.map(value => '"' + String(value || '').replace(/"/g, '""') + '"').join(';'))
+        .join('\r\n')
+      const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }))
+      const link = document.createElement('a')
+
+      link.href = url
+      link.download = 'inventory-' + inventory.id + '.csv'
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      URL.revokeObjectURL(url)
     },
     updateData () {
       this.$http.get(GET_INVENTORIZATIONS)
