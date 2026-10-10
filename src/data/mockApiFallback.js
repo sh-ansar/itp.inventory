@@ -684,11 +684,135 @@ const responseMap = {
 
 export const mockCompanies = companies
 
+const inventorySelections = {}
+
 function clone (value) {
   if (value === undefined) {
     return undefined
   }
   return JSON.parse(JSON.stringify(value))
+}
+
+function requestData (config) {
+  const data = config && config.data
+
+  if (!data) {
+    return {}
+  }
+
+  if (typeof FormData !== 'undefined' && data instanceof FormData) {
+    const result = {}
+
+    data.forEach((value, rawKey) => {
+      const isArrayKey = /\[\]$/.test(rawKey)
+      const key = rawKey.replace(/\[\]$/, '')
+
+      if (isArrayKey) {
+        if (!Array.isArray(result[key])) {
+          result[key] = []
+        }
+        result[key].push(value)
+      } else {
+        result[key] = value
+      }
+    })
+
+    return result
+  }
+
+  if (typeof data === 'string') {
+    try {
+      return JSON.parse(data)
+    } catch (e) {
+      return {}
+    }
+  }
+
+  if (typeof data === 'object') {
+    return data
+  }
+
+  return {}
+}
+
+function asBoolean (value) {
+  return value === true || value === 1 || value === '1' || value === 'true'
+}
+
+function nextId (list) {
+  return list.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0) + 1
+}
+
+function formatDateTime (date = new Date()) {
+  const pad = value => String(value).padStart(2, '0')
+  return [
+    pad(date.getDate()),
+    pad(date.getMonth() + 1),
+    date.getFullYear(),
+  ].join('.') + ' ' + pad(date.getHours()) + ':' + pad(date.getMinutes())
+}
+
+function findTreeNode (nodes, id) {
+  const targetId = Number(id)
+
+  for (let index = 0; index < nodes.length; index++) {
+    const node = nodes[index]
+
+    if (Number(node.id) === targetId) {
+      return node
+    }
+
+    const children = node.items || node.children
+
+    if (Array.isArray(children)) {
+      const found = findTreeNode(children, targetId)
+      if (found) {
+        return found
+      }
+    }
+  }
+
+  return null
+}
+
+function removeTreeNode (nodes, id) {
+  const targetId = Number(id)
+
+  for (let index = 0; index < nodes.length; index++) {
+    if (Number(nodes[index].id) === targetId) {
+      nodes.splice(index, 1)
+      return true
+    }
+
+    const children = nodes[index].items || nodes[index].children
+
+    if (Array.isArray(children) && removeTreeNode(children, targetId)) {
+      return true
+    }
+  }
+
+  return false
+}
+
+function updateRelatedItemLabels (item) {
+  const company = companies.find(company => Number(company.id) === Number(item.company_id))
+  const location = locations.find(location => Number(location.id) === Number(item.location_id))
+  const person = persons.find(person => String(person.iin) === String(item.responsible_person_iin || item.responsible_person_inn))
+
+  if (company) {
+    item.company = company.name
+  }
+
+  if (location) {
+    item.location = location.name
+  }
+
+  if (person) {
+    item.responsible_person = person.name
+    item.responsible_person_inn = person.iin
+  }
+
+  return item
 }
 
 function filteredItems (config) {
@@ -709,7 +833,348 @@ function filteredItems (config) {
     data = data.filter(item => Number(item.company_id) === Number(params.company_id))
   }
 
+  if (Array.isArray(params.companies) && params.companies.length) {
+    const selectedCompanies = params.companies.map(Number)
+    data = data.filter(item => selectedCompanies.includes(Number(item.company_id)))
+  }
+
+  if (Array.isArray(params.persons) && params.persons.length) {
+    const selectedPersons = params.persons.map(String)
+    data = data.filter(item => selectedPersons.includes(String(item.responsible_person_iin)))
+  }
+
+  if (Array.isArray(params.locations) && params.locations.length) {
+    const selectedLocations = params.locations.map(Number)
+    data = data.filter(item => selectedLocations.includes(Number(item.location_id)))
+  }
+
   return data
+}
+
+function addDemoItem (data) {
+  const id = nextId(items)
+  const statusId = String(data.status_id || '1')
+  const item = updateRelatedItemLabels({
+    id,
+    ...data,
+    status_id: statusId,
+    status: statusId === '3' ? 'Утилизирован' : (statusId === '2' ? 'За балансом' : 'На балансе'),
+    is_utilized: statusId === '3' ? '1' : '0',
+    source: true,
+    code: data.code || 'OS-' + String(300 + id).padStart(6, '0'),
+    inventory_number: data.inventory_number || 'INV-2026-' + String(300 + id).padStart(5, '0'),
+  })
+
+  items.unshift(item)
+  return item
+}
+
+function updateDemoItem (data) {
+  const itemId = Number(data.item_id || data.id)
+  const item = items.find(item => Number(item.id) === itemId)
+
+  if (!item) {
+    return null
+  }
+
+  const values = { ...data }
+  delete values.item_id
+  Object.assign(item, values)
+  updateRelatedItemLabels(item)
+  return item
+}
+
+function setDemoUtilization (data) {
+  const item = items.find(item => Number(item.id) === Number(data.id))
+
+  if (!item) {
+    return null
+  }
+
+  const utilized = asBoolean(data.is_utilized)
+  item.is_utilized = utilized ? '1' : '0'
+  item.status_id = utilized ? '3' : '1'
+  item.status = utilized ? 'Утилизирован' : 'На балансе'
+  item.date_utilized = utilized ? formatDateTime().split(' ')[0] : undefined
+
+  return item
+}
+
+function setDemoInventoryCompletion (data) {
+  const inventory = inventories.find(item => Number(item.id) === Number(data.id))
+
+  if (!inventory) {
+    return null
+  }
+
+  const completed = asBoolean(data.is_completed)
+  inventory.completed = completed
+  inventory.status = completed ? 'Завершено' : 'В процессе'
+  inventory.date_completed = completed ? formatDateTime() : null
+
+  return inventory
+}
+
+function createDemoInventory (data) {
+  const id = nextId(inventories)
+  const selectedCompanyIds = Array.isArray(data.companies) ? data.companies.map(Number) : []
+  const selectedItems = Array.isArray(data.items) ? data.items.map(Number) : []
+  const selectedCompanies = companies
+    .filter(company => selectedCompanyIds.includes(Number(company.id)))
+    .map(company => company.name)
+
+  const inventory = {
+    id,
+    date: formatDateTime(),
+    author: userInfo.fio,
+    status: 'В процессе',
+    companies: selectedCompanies.join(', ') || 'Все компании',
+    persons: '',
+    locations: '',
+    completed: false,
+    date_completed: null,
+    file_name: '',
+    file_hashname: '',
+  }
+
+  inventories.unshift(inventory)
+  inventorySelections[id] = selectedItems
+  return inventory
+}
+
+function addDemoPerson (data) {
+  const person = {
+    id: nextId(persons),
+    name: data.name || 'Новый ответственный',
+    iin: data.iin || String(900000000000 + nextId(persons)),
+    company_id: Number(data.company_id) || 1,
+    is_self_added: true,
+  }
+
+  persons.push(person)
+  return person
+}
+
+function updateDemoPerson (data) {
+  const person = persons.find(item => Number(item.id) === Number(data.id)) ||
+    persons.find(item => String(item.iin) === String(data.iin))
+
+  if (!person) {
+    return null
+  }
+
+  Object.assign(person, data)
+  return person
+}
+
+function addDemoLocation (data) {
+  const id = Math.max(
+    locations.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0),
+    5000,
+  ) + 1
+
+  const parent = data.parent_id ? findTreeNode(locationTree, data.parent_id) : null
+  const companyId = Number(data.company_id) || (parent && Number(parent.company_id)) || 1
+  const location = {
+    id,
+    name: data.name || 'Новое расположение',
+    company_id: companyId,
+    is_1c: asBoolean(data.is_1c),
+  }
+
+  if (data.parent_id || (!data.company_id && !data.is_1c)) {
+    const node = { ...location, is_1c: false }
+
+    if (parent) {
+      if (!Array.isArray(parent.items)) {
+        parent.items = []
+      }
+      parent.items.push(node)
+    } else {
+      locationTree.push(node)
+    }
+  } else {
+    locations.push(location)
+  }
+
+  return location
+}
+
+function updateDemoLocation (data) {
+  const location = locations.find(item => Number(item.id) === Number(data.id))
+  const treeNode = findTreeNode(locationTree, data.id)
+
+  if (location) {
+    Object.assign(location, data)
+  }
+
+  if (treeNode) {
+    Object.assign(treeNode, data)
+  }
+
+  return location || treeNode || null
+}
+
+function startDemoSync (config) {
+  const companyId = Number(config && config.params && config.params.companyId)
+  const company = companies.find(item => Number(item.id) === companyId)
+  const id = nextId(syncs)
+  const now = formatDateTime()
+
+  syncs.unshift({
+    id,
+    date_time: now,
+    initiator: userInfo.fio,
+    company: company ? company.name : 'ITP Mining',
+    status: 'Завершенно',
+    changes: 12,
+  })
+
+  if (company) {
+    const dashboardRow = companySyncs.find(item => item.name === company.name)
+    if (dashboardRow) {
+      dashboardRow.date_time = now
+      dashboardRow.status = 'Завершено'
+      dashboardRow.changed += 12
+    }
+  }
+
+  currentSyncStatus.status = 'Система готова к синхронизации'
+  currentSyncStatus.color = 'success'
+
+  return { success: true, sync_id: id }
+}
+
+function handleDemoWrite (url, config) {
+  const data = requestData(config)
+
+  if (url === ADD_ITEM) {
+    const item = addDemoItem(data)
+    return { success: true, id: item.id }
+  }
+
+  if (url === UPDATE_ITEM) {
+    const item = updateDemoItem(data)
+    return { success: !!item }
+  }
+
+  if (url === SET_UTILIZATION_STATUS) {
+    const item = setDemoUtilization(data)
+    return { success: !!item }
+  }
+
+  if (url === SET_INV_COMPLETE_STATUS) {
+    const inventory = setDemoInventoryCompletion(data)
+    return { success: !!inventory }
+  }
+
+  if (url === CREATE_INVENTORY_CHECK) {
+    const inventory = createDemoInventory(data)
+    return { success: true, id: inventory.id }
+  }
+
+  if (url === UPLOAD_REPORT_FILE) {
+    const inventory = inventories.find(item => Number(item.id) === Number(data.inv_check_id))
+    if (inventory && data.report_file) {
+      inventory.file_name = data.report_file.name || 'inventory-report-demo.xlsx'
+      inventory.file_hashname = inventory.file_name
+    }
+    return { success: !!inventory }
+  }
+
+  if (url === UPLOAD_UTIL_ORDER_FILE) {
+    const item = items.find(item => Number(item.id) === Number(data.item_id))
+    if (item && data.order_file) {
+      item.util_order_file_name = data.order_file.name || 'utilization-act-demo.pdf'
+    }
+    return { success: !!item }
+  }
+
+  if (url === ADD_RESPONSIBLE_PERSON) {
+    const person = addDemoPerson(data)
+    return { success: true, id: person.id }
+  }
+
+  if (url === UPDATE_RESPONSIBLE_PERSON) {
+    return { success: !!updateDemoPerson(data) }
+  }
+
+  if (url === ADD_LOCATIONS_FACT) {
+    const location = addDemoLocation(data)
+    return { success: true, id: location.id }
+  }
+
+  if (url === SAVE_LOCATIONS_FACT) {
+    return { success: !!updateDemoLocation(data) }
+  }
+
+  if (url === DELETE_LOCATION) {
+    const id = Number(data.id)
+    const locationIndex = locations.findIndex(item => Number(item.id) === id)
+    if (locationIndex >= 0) {
+      locations.splice(locationIndex, 1)
+    }
+    const removedFromTree = removeTreeNode(locationTree, id)
+    return { success: locationIndex >= 0 || removedFromTree }
+  }
+
+  if (url === UPDATE_ROLE) {
+    const role = roles.find(item => Number(item.id) === Number(data.id))
+    if (role) {
+      role.is_manager = asBoolean(data.is_manager)
+    }
+    return { success: !!role }
+  }
+
+  if (url === UPDATE_GUEST_ROLE) {
+    const guest = guests.find(item => Number(item.id) === Number(data.id))
+    if (guest) {
+      guest.is_guest = asBoolean(data.is_guest)
+    }
+    return { success: !!guest }
+  }
+
+  if (url === SAVE_SYNC_SETTINGS) {
+    const company = companies.find(item => Number(item.id) === Number(data.id))
+    if (company) {
+      Object.assign(company, data)
+      if (data.days !== undefined) {
+        company.days = Number(data.days)
+      }
+    }
+    return { success: !!company }
+  }
+
+  if (url === ADD_COMPANY) {
+    const company = {
+      id: nextId(companies),
+      name: data.name || 'Новая компания',
+      days: Number(data.days) || 1,
+      url: data.url || '',
+      is_deleted: 0,
+      is_self_added: 1,
+    }
+    companies.push(company)
+    return { success: true, id: company.id }
+  }
+
+  if (url === SAVE_USER_PREFERENCES) {
+    const tableId = String(data.table_id || '')
+    if (tableId) {
+      tablePreferences[tableId] = data.json_string || '{}'
+    }
+    return { success: true }
+  }
+
+  if (url === CLEAR_USER_PREFERENCES) {
+    const tableId = String(data.table_id || '')
+    if (tableId) {
+      delete tablePreferences[tableId]
+    }
+    return { success: true }
+  }
+
+  return { success: true }
 }
 
 export function getMockApiData (config) {
@@ -718,6 +1183,7 @@ export function getMockApiData (config) {
   }
 
   const url = String(config.url).replace(/^\//, '')
+  const method = String(config.method || 'get').toLowerCase()
 
   if (url === GET_ITEMS) {
     return clone(filteredItems(config))
@@ -727,14 +1193,32 @@ export function getMockApiData (config) {
     return clone(itemCounts(config))
   }
 
-  if (Object.prototype.hasOwnProperty.call(responseMap, url)) {
-    return clone(responseMap[url])
+  if (url === GET_INVENTORY_CHECK_ITEMS) {
+    const inventoryId = Number(config.params && config.params.inv_check_id)
+    const selectedIds = inventorySelections[inventoryId]
+
+    if (Array.isArray(selectedIds) && selectedIds.length) {
+      return clone(items.filter(item => selectedIds.includes(Number(item.id))))
+    }
+
+    return clone(inventoryItems)
   }
 
-  const method = String(config.method || 'get').toLowerCase()
+  if (url === LOAD_USER_PREFERENCES) {
+    const tableId = String((config.params && config.params.table_id) || '')
+    return tablePreferences[tableId] || '{}'
+  }
+
+  if (url === GET_START_MANUAL_SYNC) {
+    return clone(startDemoSync(config))
+  }
 
   if (method !== 'get') {
-    return { success: true }
+    return clone(handleDemoWrite(url, config))
+  }
+
+  if (Object.prototype.hasOwnProperty.call(responseMap, url)) {
+    return clone(responseMap[url])
   }
 
   return undefined
