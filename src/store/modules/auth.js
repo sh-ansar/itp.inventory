@@ -3,7 +3,7 @@ import {LOGIN, LOGOUT, USER_INFO} from '../../consts/urls'
 import { axios } from '../../app/main'
 import {AUTH_USER_INFO} from "../../consts/auth";
 const state = {
-  token: localStorage.getItem('user-token') || '',
+  token: localStorage.getItem('user-token') || sessionStorage.getItem('user-token') || '',
   status: '',
   userInfo: null
 }
@@ -39,21 +39,31 @@ const actions = {
         .catch(err => {
           commit(AUTH_CONSTS.AUTH_ERROR, err)
           localStorage.removeItem('user-token')
-          //window.location = '/#/auth/login'
+          sessionStorage.removeItem('user-token')
           reject(err)
         })
     })
   },
-  [AUTH_CONSTS.AUTH_REQUEST]: ({commit, dispatch}, user) => {
+  [AUTH_CONSTS.AUTH_REQUEST]: ({commit, dispatch}, payload) => {
     return new Promise((resolve, reject) => {
       commit(AUTH_CONSTS.AUTH_REQUEST)
-      // let formData = new FormData()
-      // formData.append('username', user.username)
-      // formData.append('password', user.password)
-      axios.post(LOGIN, user)
+
+      const credentials = payload && payload.credentials ? payload.credentials : payload
+      const keepLoggedIn = !!(payload && payload.keepLoggedIn)
+
+      axios.post(LOGIN, credentials)
         .then(resp => {
           const token = resp.data
-          localStorage.setItem('user-token', token)
+
+          localStorage.removeItem('user-token')
+          sessionStorage.removeItem('user-token')
+
+          if (keepLoggedIn) {
+            localStorage.setItem('user-token', token)
+          } else {
+            sessionStorage.setItem('user-token', token)
+          }
+
           axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
           commit(AUTH_CONSTS.AUTH_SUCCESS, token)
           dispatch(AUTH_USER_INFO)
@@ -75,6 +85,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit(AUTH_CONSTS.AUTH_LOGOUT)
       localStorage.removeItem('user-token')
+      sessionStorage.removeItem('user-token')
       delete axios.defaults.headers.common['Authorization']
       resolve()
     })
