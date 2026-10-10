@@ -388,11 +388,17 @@
         </div>
       </div>
     </va-modal>
+    <QrBatchModal
+      v-model="showQRBatchModal"
+      :items="qrBatchItems"
+      :prefix="qrPrefix"
+    />
   </div>
 </template>
 
 <script>
 import ClearPreferencesButton from '../ClearPreferencesButton'
+import QrBatchModal from '../QrBatchModal'
 import {
   DxDataGrid,
   DxColumn,
@@ -411,7 +417,7 @@ import {
   DxFilterRow,
   DxSelection,
 } from 'devextreme-vue/data-grid'
-import { BASE_URL, QR_APPDX } from '../../consts/common'
+import { BASE_URL, IS_MOCK_MODE, QR_APPDX } from '../../consts/common'
 import QrcodeVue from 'qrcode.vue'
 import {
   ADD_ITEM,
@@ -473,6 +479,9 @@ export default {
       }],
       items: [],
       showQRModal: false,
+      showQRBatchModal: false,
+      qrBatchItems: [],
+      qrPrefix: QR_APPDX,
       qrvalue: '',
       editButtons: [
         'edit',
@@ -759,15 +768,28 @@ export default {
     },
     generateQRs () {
       this.chosenItems = []
-      let itemsObj = this.$refs.itemsGrid.instance.getSelectedRowsData()
-      if (itemsObj.length <= 100) {
-        itemsObj.forEach((element) => {
-          this.chosenItems.push(element.id)
-        })
-        window.open(BASE_URL + GET_QR_CODES + this.generateItemsList(this.chosenItems), '_blank')
-      } else {
-        this.$swal(this.$t('app.common.error'), this.$t('app.common.qrLimit'), 'warning')
+      const itemsObj = this.$refs.itemsGrid.instance.getSelectedRowsData()
+
+      if (!itemsObj.length) {
+        this.$swal(this.$t('app.common.error'), this.$t('app.common.selectAssetsWarning'), 'warning')
+        return
       }
+
+      if (itemsObj.length > 100) {
+        this.$swal(this.$t('app.common.error'), this.$t('app.common.qrLimit'), 'warning')
+        return
+      }
+
+      if (IS_MOCK_MODE) {
+        this.qrBatchItems = itemsObj
+        this.showQRBatchModal = true
+        return
+      }
+
+      itemsObj.forEach((element) => {
+        this.chosenItems.push(element.id)
+      })
+      window.open(BASE_URL + GET_QR_CODES + this.generateItemsList(this.chosenItems), '_blank')
     },
     generateItemsList (items) {
       let params = ''
