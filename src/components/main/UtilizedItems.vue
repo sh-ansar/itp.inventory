@@ -255,6 +255,11 @@
           </div>
         </div>
       </va-modal>
+      <QrBatchModal
+        v-model="showQRBatchModal"
+        :items="qrBatchItems"
+        :prefix="qrPrefix"
+      />
     </div>
   </div>
 </template>
@@ -279,7 +284,8 @@ import {
   DxSelection,
 } from 'devextreme-vue/data-grid'
 import QrcodeVue from 'qrcode.vue'
-import { BASE_URL, QR_APPDX, UPLOADS } from '../../consts/common'
+import QrBatchModal from '../QrBatchModal'
+import { BASE_URL, IS_MOCK_MODE, QR_APPDX, UPLOADS } from '../../consts/common'
 import {
   GET_ITEMS,
   GET_ITEMS_COUNT, GET_LOCATIONS,
@@ -293,6 +299,7 @@ export default {
   name: 'UtilizedItems',
   components: {
     ClearPreferencesButton,
+    QrBatchModal,
     DxDataGrid,
     DxColumn,
     DxGrouping,
@@ -316,6 +323,9 @@ export default {
       items: [],
       pageSizes: [5, 10, 20, 50, 100, 200, 500],
       showQRModal: false,
+      showQRBatchModal: false,
+      qrBatchItems: [],
+      qrPrefix: QR_APPDX,
       qrvalue: '',
       locations: [],
       persons: [],
@@ -489,7 +499,24 @@ export default {
     },
     generateQRs () {
       this.chosenItems = []
-      let itemsObj = this.$refs.itemsGrid.instance.getSelectedRowsData()
+      const itemsObj = this.$refs.itemsGrid.instance.getSelectedRowsData()
+
+      if (!itemsObj.length) {
+        this.$swal(this.$t('app.common.error'), this.$t('app.common.selectAssetsWarning'), 'warning')
+        return
+      }
+
+      if (itemsObj.length > 100) {
+        this.$swal(this.$t('app.common.error'), this.$t('app.common.qrLimit'), 'warning')
+        return
+      }
+
+      if (IS_MOCK_MODE) {
+        this.qrBatchItems = itemsObj
+        this.showQRBatchModal = true
+        return
+      }
+
       itemsObj.forEach((element) => {
         this.chosenItems.push(element.id)
       })
