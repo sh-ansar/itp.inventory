@@ -409,10 +409,9 @@ import {
   DxSearchPanel,
   DxColumnChooser,
   DxFilterRow,
-  DxButton,
   DxSelection,
 } from 'devextreme-vue/data-grid'
-import * as COMMON_CONSTS from '../../consts/common'
+import { BASE_URL, QR_APPDX } from '../../consts/common'
 import QrcodeVue from 'qrcode.vue'
 import {
   ADD_ITEM,
@@ -423,7 +422,6 @@ import {
   LOAD_USER_PREFERENCES, SAVE_USER_PREFERENCES,
   SET_UTILIZATION_STATUS, UPDATE_ITEM,
 } from '../../consts/urls'
-import { QR_APPDX } from '../../consts/common'
 import { mapGetters } from 'vuex'
 import LocationsTree from '@/components/main/LocationsTree'
 export default {
@@ -446,7 +444,6 @@ export default {
     DxColumnChooser,
     DxFilterRow,
     DxExport,
-    DxButton,
     QrcodeVue,
     DxSelection,
   },
@@ -539,7 +536,7 @@ export default {
         'status_id',
         'account',
       ]
-      if (e.row && e.row.data.source != null && e.row.data.source != undefined && !e.row.data.source) {
+      if (e.row && e.row.data.source !== null && e.row.data.source !== undefined && !e.row.data.source) {
         if (disCols.includes(e.dataField)) {
           e.editorOptions.disabled = true
         }
@@ -767,7 +764,7 @@ export default {
         itemsObj.forEach((element) => {
           this.chosenItems.push(element.id)
         })
-        window.open(COMMON_CONSTS.BASE_URL + GET_QR_CODES + this.generateItemsList(this.chosenItems), '_blank')
+        window.open(BASE_URL + GET_QR_CODES + this.generateItemsList(this.chosenItems), '_blank')
       } else {
         this.$swal(this.$t('app.common.error'), this.$t('app.common.qrLimit'), 'warning')
       }
