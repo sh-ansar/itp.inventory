@@ -190,7 +190,16 @@
            cell-template="fileCellTemplate"
           />
           <template #fileCellTemplate="data">
-            <a :href="uploadsPath+'/'+data.data.data.util_order_file_hashname" :title="data.data.value" target="_blank">{{data.data.value}}</a>
+            <a
+              v-if="data.data.value && !isMockMode"
+              :href="uploadsPath+'/'+data.data.data.util_order_file_hashname"
+              :title="data.data.value"
+              target="_blank"
+            >{{data.data.value}}</a>
+            <span
+              v-else-if="data.data.value"
+              :title="data.data.value"
+            >{{data.data.value}}</span>
           </template>
           <dx-column
            type="buttons"
@@ -330,6 +339,7 @@ export default {
       locations: [],
       persons: [],
       uploadsPath: UPLOADS,
+      isMockMode: IS_MOCK_MODE,
       chosenItems: [],
     }
   },
