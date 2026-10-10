@@ -546,7 +546,6 @@ export default {
       fileInput.click();
       fileInput.onchange = (e) => {
         if(e.target.files.length !== 0) {
-          console.log(e.target.files);
           this.$swal({
             title: this.$t('app.common.areYouSure'),
             text: this.$t('app.common.attachFileConfirm') + ' ' + e.target.files[0].name,
