@@ -402,8 +402,10 @@ export default {
             }
           })
           .then((response) => {
-            this.$swal(this.$t('app.common.success'), this.$t('app.pages.sync.createdSuccessfully'), 'success')
-            this.updateData()
+            if (response) {
+              this.$swal(this.$t('app.common.success'), this.$t('app.pages.sync.createdSuccessfully'), 'success')
+              this.updateData()
+            }
           })
       } else {
         this.$swal(this.$t('app.common.error'), this.$t('app.pages.sync.companyRequired'), 'error')
