@@ -309,29 +309,29 @@ export default {
       }
       return status || this.$t('app.status.ready')
     },
-    async customLoad (table_id) {
+    async customLoad (tableId) {
       let state = await this.$http.get(LOAD_USER_PREFERENCES, {
         params: {
-          table_id: table_id,
+          table_id: tableId,
         },
       })
       return JSON.parse(state.data)
     },
-    customSave (state, table_id) {
+    customSave (state, tableId) {
       let stateStr = JSON.stringify(state)
       this.$http.post(SAVE_USER_PREFERENCES, {
-        table_id: table_id,
+        table_id: tableId,
         json_string: stateStr,
       })
     },
     async customLoadSyncs () {
-      return await this.customLoad('sync')
+      return this.customLoad('sync')
     },
     customSaveSyncs (state) {
       this.customSave(state, 'sync')
     },
     async customLoadSyncData () {
-      return await this.customLoad('sync_data')
+      return this.customLoad('sync_data')
     },
     customSaveSyncData (state) {
       this.customSave(state, 'sync_data')
