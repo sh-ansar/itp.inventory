@@ -1,7 +1,4 @@
 const getDefaultOptions = () => {
-  let appColors = localStorage.getItem('app-colors')
-  appColors = JSON.parse(appColors)
-
   // if(appColors) {
   //   return {
   //     themes: {
