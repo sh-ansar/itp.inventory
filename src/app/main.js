@@ -41,7 +41,7 @@ const axios = Axios.create({
 })
 
 axios.interceptors.request.use(function (config) {
-  const token = localStorage.getItem('user-token')
+  const token = localStorage.getItem('user-token') || sessionStorage.getItem('user-token')
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
@@ -68,6 +68,62 @@ axios.interceptors.request.use(function (config) {
   return config
 }, function (error) {
   return Promise.reject(error)
+})
+
+
+const publicRoutes = ['login', 'signup', 'recover-password']
+
+async function ensureUserInfo () {
+  if (store.getters.userInfo) {
+    return true
+  }
+
+  try {
+    await store.dispatch(AUTH_USER_INFO)
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+router.beforeEach(async (to, from, next) => {
+  const token = localStorage.getItem('user-token') || sessionStorage.getItem('user-token')
+  const isPublicRoute = publicRoutes.includes(to.name)
+
+  if (!useLocalMockFallback && !token && !isPublicRoute) {
+    next({ name: 'login', query: { redirect: to.fullPath } })
+    return
+  }
+
+  if (!useLocalMockFallback && token && to.name === 'login') {
+    next({ name: 'dashboard' })
+    return
+  }
+
+  const requiredRoles = to.matched.reduce((roles, route) => {
+    if (route.meta && Array.isArray(route.meta.roles)) {
+      return roles.concat(route.meta.roles)
+    }
+    return roles
+  }, [])
+
+  if (requiredRoles.length) {
+    const hasUserInfo = await ensureUserInfo()
+
+    if (!hasUserInfo) {
+      next(useLocalMockFallback ? { name: 'dashboard' } : { name: 'login' })
+      return
+    }
+
+    const isAllowed = requiredRoles.some(role => !!store.getters[role])
+
+    if (!isAllowed) {
+      next({ name: 'dashboard' })
+      return
+    }
+  }
+
+  next()
 })
 
 axios.interceptors.response.use(function (response) {
