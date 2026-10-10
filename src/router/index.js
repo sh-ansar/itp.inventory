@@ -48,10 +48,7 @@ const router = new Router({
         {
           name: 'add-item',
           path: 'add-item',
-          component: () => import('../components/main/AddItem.vue'),
-          meta: {
-            title: 'ITP Inventory | Добавление средства',
-          },
+          redirect: { name: 'items' },
         },
         {
           name: 'inventorization',
@@ -170,6 +167,7 @@ const router = new Router({
           component: () => import('../components/admin/Sync.vue'),
           meta: {
             title: 'ITP Inventory | Синхронизации',
+            roles: ['canManager'],
           },
         },
         {
@@ -178,6 +176,7 @@ const router = new Router({
           component: () => import('../components/admin/SyncSettings.vue'),
           meta: {
             title: 'ITP Inventory | Настройки компаний',
+            roles: ['canManager'],
           },
         },
         {
@@ -186,6 +185,7 @@ const router = new Router({
           component: () => import('../components/admin/ManageRoles.vue'),
           meta: {
             title: 'ITP Inventory | Роли специалистов',
+            roles: ['canAdmin'],
           },
         },
         {
@@ -194,6 +194,7 @@ const router = new Router({
           component: () => import('../components/admin/ManageGuestRoles.vue'),
           meta: {
             title: 'ITP Inventory | Роли гостей',
+            roles: ['canAdmin'],
           },
         },
       ],
