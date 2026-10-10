@@ -174,7 +174,7 @@ export default {
     rowUpdated(e){
       let params = {}
       for(let prop in e.data) {
-        if(e.data[prop]){
+        if(e.data[prop] !== undefined && e.data[prop] !== null){
           params[prop] = e.data[prop]
         }
       }
@@ -187,7 +187,7 @@ export default {
     rowInserted(e){
       let params = {}
       for(let prop in e.data) {
-        if(e.data[prop]){
+        if(e.data[prop] !== undefined && e.data[prop] !== null){
           params[prop] = e.data[prop]
         }
       }
