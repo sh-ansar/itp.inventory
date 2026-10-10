@@ -648,7 +648,12 @@ const userInfo = {
   },
 }
 
-const preferenceResponse = '{}'
+const tablePreferences = {}
+
+const currentSyncStatus = {
+  status: 'Система готова к синхронизации',
+  color: 'success',
+}
 
 const responseMap = {
   [USER_INFO]: userInfo,
@@ -661,8 +666,7 @@ const responseMap = {
   [GET_RESPONSIBLE_PERSONS]: persons,
   [GET_INVENTORIZATIONS]: inventories,
   [GET_INVENTORY_CHECK_ITEMS]: inventoryItems,
-  [GET_CURRENT_SYNC_STATUS]: { status: 'Система готова к синхронизации', color: 'success' },
-  [GET_START_MANUAL_SYNC]: { success: true },
+  [GET_CURRENT_SYNC_STATUS]: currentSyncStatus,
   [FORM_REPORT]: 'inventory-report-test.xlsx',
   [GET_SYNCS]: syncs,
   [GET_SYNC_CHANGES]: syncChanges,
@@ -672,7 +676,6 @@ const responseMap = {
   [GET_LINE_CHARTS]: lineChart,
   [GET_WHITE_PILLOWS_DATA]: activity,
   [GET_INVS_STATUS]: inventoryProgress,
-  [LOAD_USER_PREFERENCES]: preferenceResponse,
   [GET_ITEM_CHANGES]: [
     { id: 1, date_change: '05.10.2026', event: 'Изменено местоположение' },
     { id: 2, date_change: '03.10.2026', event: 'Обновлена текущая стоимость' },
