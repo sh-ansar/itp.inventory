@@ -330,7 +330,6 @@ export default {
       return this.$t('app.status.utilized')
     },
     saveUpdatedData(e) {
-      console.log(e);
       this.$http.post(UPDATE_ITEM,{
         item_id: e.data.id,
         fact_location_id: e.data.fact_location_id,
@@ -349,7 +348,6 @@ export default {
       fileInput.click();
       fileInput.onchange = (e) => {
         if(e.target.files.length !== 0) {
-          console.log(e.target.files);
           this.$swal({
             title: this.$t('app.common.areYouSure'),
             text: this.$t('app.common.attachFileConfirm') + ' ' + e.target.files[0].name,
