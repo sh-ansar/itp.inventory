@@ -1,5 +1,5 @@
 <template>
-  
+  <div aria-hidden="true"></div>
 </template>
 
 <script>
